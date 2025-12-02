@@ -1,0 +1,9 @@
+{
+  "block_size_m": [64, 128],
+  "block_size_n": [16, 32],
+  "num_warps": [2, 4],
+  "num_stages": [2, 3],
+  "waves_per_eu": [1, 2],
+  "stage": [1]
+}
+
