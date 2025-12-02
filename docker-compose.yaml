@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+  xdit_sage_bench:
+    image: amdsiloai/pytorch-xdit:v25.11.2
+    shm_size: '128G'
+    ipc: "host"
+    cap_add:
+      - SYS_PTRACE
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    network_mode: "host"
+    security_opt:
+      - "seccomp=unconfined"
+    user: root
+    group_add:
+      - video
+    hostname: "sage-bench-${HOSTNAME:-local}"
+    volumes:
+      - type: bind
+        source: "${HOME}"
+        target: "/workspace"
+      - "local-files:/var/${USER}"
+      - "/tmp/.X11-unix:/tmp/.X11-unix"
+      - "/etc/apt:/etc/apt"
+      - "/mnt/m2m_nobackup:/mnt/m2m_nobackup"
+    working_dir: /workspace
+    entrypoint: ["tail", "-f", "/dev/null"]
+    environment:
+      - CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
+volumes:
+  local-files:
