@@ -14,13 +14,13 @@ This directory contains a multi-threaded tuning script for the attention QK INT8
 
 ```bash
 python tune_attn_qk_int8_multithreading.py \
-  --seq-len 8192 16384 32768 \
+  --seq-len 16452 29760 75600 118808 \
   --batch-size 1 \
-  --num-heads 5 \
+  --num-heads 2 \
   --head-dim 128 \
   --config-file tuning_space_attn_qk_int8.json \
-  --num-workers 4 \
-  --max-configs-without-improvement 1000
+  --num-workers 32 \
+  --max-configs-without-improvement 10000
 ```
 
 ### Quick Test with Small Config Space

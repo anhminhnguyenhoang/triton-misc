@@ -11,7 +11,7 @@ SEQ_LENS=(75600 16452 118808 29760)
 # Run benchmarks for all configurations
 for i in ${!BATCH_SIZES[@]}; do
     echo "Running benchmark $((i+1))/4: batch_size=${BATCH_SIZES[i]}, num_heads=${NUM_HEADS[i]}, seq_len=${SEQ_LENS[i]}"
-    python op_tests/op_benchmarks/triton/bench_attn_qk_int8_per_block.py \
+    TRITON_HIP_ASYNC_COPY_BYPASS_PERMUTE=1 TRITON_HIP_USE_ASYNC_COPY=1 AMDGCN_USE_BUFFER_OPS=0 TRITON_HIP_USE_BLOCK_PINGPONG=1 python op_tests/op_benchmarks/triton/bench_attn_qk_int8_per_block.py \
         --batch_size ${BATCH_SIZES[i]} \
         --num_heads ${NUM_HEADS[i]} \
         --seq_len ${SEQ_LENS[i]} \
