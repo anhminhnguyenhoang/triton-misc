@@ -1,0 +1,12 @@
+{
+  "block_size_m": [16, 32],
+  "block_size_n": [16, 32, 64, 128, 256],
+  "block_size_k": [128],
+  "group_size_m": [1, 2, 4, 8, 10, 11, 12, 16],
+  "num_warps": [1, 2, 4, 8, 16],
+  "num_stages": [1, 2, 3, 4, 5],
+  "waves_per_eu": [0, 1, 2, 4, 8],
+  "matrix_instr_nonkdim": [16],
+  "cache_modifier": [".ca", ".cg", null],
+  "num_ksplit": [1]
+}
