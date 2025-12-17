@@ -1,0 +1,11 @@
+{
+    "comment": "Tuning space for FlashAttention v2 (FAv2)",
+    "BLOCK_M": [32, 64, 128, 256],
+    "BLOCK_N": [32, 64, 128],
+    "PRELOAD_V": [false, true],
+    "waves_per_eu": [1, 2, 4],
+    "num_warps": [2, 4, 8],
+    "num_stages": [1, 2],
+    "num_ctas": [1]
+}
+

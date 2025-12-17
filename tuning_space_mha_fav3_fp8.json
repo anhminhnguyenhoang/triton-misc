@@ -1,0 +1,10 @@
+{
+    "comment": "Tuning space for FlashAttention v3 FP8 (FAv3 FP8)",
+    "BLOCK_M": [32, 64, 128],
+    "BLOCK_N": [32, 64, 128],
+    "PRE_LOAD_V": [false, true],
+    "waves_per_eu": [1, 2, 4],
+    "num_warps": [2, 4, 8],
+    "num_stages": [1, 2]
+}
+

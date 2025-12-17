@@ -3,9 +3,9 @@
 #
 
 # using amdsiloai/pytorch-xdit would be better, but there is unknown issue with the rocprof-compute installation
-#BASE_IMAGE=amdsiloai/pytorch-xdit:v25.11.2
+ARG BASE_IMAGE=amdsiloai/pytorch-xdit:v25.13.1
 # Using vllm image because it has rocprof-compute in packages
-ARG BASE_IMAGE=rocm/vllm:rocm7.0.0_vllm_0.11.1_20251103
+# ARG BASE_IMAGE=rocm/vllm:rocm7.0.0_vllm_0.11.1_20251103
 
 FROM ${BASE_IMAGE} AS base
 
