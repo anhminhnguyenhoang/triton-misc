@@ -1,8 +1,7 @@
 version: "3.4"
 services:
   sageattn_bench:
-    # image: amdsiloai/pytorch-xdit:v25.11.2
-    image: sage-bench:latest
+    image: amdsiloai/pytorch-xdit:v25.13.1
     container_name: "${USER}-sageattn_bench"
     shm_size: '128G'
     ipc: "host"
