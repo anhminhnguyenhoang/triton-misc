@@ -1,0 +1,70 @@
+{
+  "75600x75600": {
+    "config": {
+      "BLOCK_M": 256,
+      "BLOCK_N": 128,
+      "num_warps": 8,
+      "num_stages": 1,
+      "waves_per_eu": 0,
+      "PRE_LOAD_V": true
+    },
+    "time_ms": 13.95478630065918,
+    "batch_size": 1,
+    "num_heads": 5,
+    "seq_len_q": 75600,
+    "seq_len_k": 75600,
+    "head_dim": 128,
+    "layout": "bshd"
+  },
+  "16452x16452": {
+    "config": {
+      "BLOCK_M": 128,
+      "BLOCK_N": 128,
+      "num_warps": 4,
+      "num_stages": 1,
+      "waves_per_eu": 2,
+      "PRE_LOAD_V": false
+    },
+    "time_ms": 0.76161216590011,
+    "batch_size": 1,
+    "num_heads": 5,
+    "seq_len_q": 16452,
+    "seq_len_k": 16452,
+    "head_dim": 128,
+    "layout": "bshd"
+  },
+  "118808x118808": {
+    "config": {
+      "BLOCK_M": 128,
+      "BLOCK_N": 128,
+      "num_warps": 4,
+      "num_stages": 1,
+      "waves_per_eu": 2,
+      "PRE_LOAD_V": true
+    },
+    "time_ms": 34.94782829284668,
+    "batch_size": 1,
+    "num_heads": 5,
+    "seq_len_q": 118808,
+    "seq_len_k": 118808,
+    "head_dim": 128,
+    "layout": "bshd"
+  },
+  "29760x29760": {
+    "config": {
+      "BLOCK_M": 128,
+      "BLOCK_N": 128,
+      "num_warps": 4,
+      "num_stages": 1,
+      "waves_per_eu": 2,
+      "PRE_LOAD_V": true
+    },
+    "time_ms": 2.435518735333493,
+    "batch_size": 1,
+    "num_heads": 5,
+    "seq_len_q": 29760,
+    "seq_len_k": 29760,
+    "head_dim": 128,
+    "layout": "bshd"
+  }
+}
