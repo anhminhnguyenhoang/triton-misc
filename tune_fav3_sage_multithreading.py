@@ -25,8 +25,12 @@ import fcntl  # For file locking
 import itertools
 import random
 
-from aiter.ops.triton.fav3_sage import (
-    fav3_sage_wrapper_func,
+import aiter
+from aiter.ops.triton.attention.fav3_sage import (
+    fav3_sage_func,
+)
+from aiter.ops.triton._triton_kernels.sage_attn_triton_amd import (
+    sage_quant,
 )
 from op_tests.op_benchmarks.triton.utils.argparse import (
     get_parser,
@@ -84,11 +88,9 @@ def get_autotune_config(config_file):
     return configs
 
 
-def get_tensors(batch_size, num_heads, seq_len_q, seq_len_k, head_dim, layout="bshd"):
+def get_tensors(batch_size, num_heads, seq_len_q, seq_len_k, head_dim, config, layout="bshd"):
     """
-    Generate high-precision tensors for fav3_sage_wrapper_func benchmarking.
-    
-    The wrapper function handles quantization internally.
+    Generate quantized tensors for fav3_sage_func benchmarking.
     
     Args:
         batch_size: Batch size
@@ -96,11 +98,15 @@ def get_tensors(batch_size, num_heads, seq_len_q, seq_len_k, head_dim, layout="b
         seq_len_q: Query sequence length
         seq_len_k: Key/Value sequence length
         head_dim: Head dimension
+        config: Config dict with BLOCK_M and BLOCK_N for quantization block sizes
         layout: Tensor layout - "bshd" or "bhsd"
         
     Returns:
-        Tuple of (q, k, v) in bfloat16
+        Tuple of (q_int8, k_int8, v_fp8, q_descale, k_descale, v_descale, FP8_MAX)
     """
+    fp8_dtype = aiter.dtypes.fp8
+    FP8_MAX = torch.finfo(fp8_dtype).max
+    
     # Generate random tensors in the specified layout
     if layout == "bshd":
         q = torch.randn((batch_size, seq_len_q, num_heads, head_dim), 
@@ -117,7 +123,23 @@ def get_tensors(batch_size, num_heads, seq_len_q, seq_len_k, head_dim, layout="b
         v = torch.randn((batch_size, num_heads, seq_len_k, head_dim), 
                        device='cuda', dtype=torch.bfloat16)
     
-    return q, k, v
+    softmax_scale = head_dim ** -0.5
+    BLKQ = config["BLOCK_M"]
+    BLKK = config["BLOCK_N"]
+    
+    # Quantize using sage_quant
+    q_int8, q_descale, k_int8, k_descale, v_fp8, v_descale = sage_quant(
+        q, k, v,
+        fp8_dtype,
+        FP8_MAX,
+        BLKQ=BLKQ,
+        BLKK=BLKK,
+        sm_scale=softmax_scale,
+        layout=layout,
+        smooth_k=True,
+    )
+    
+    return q_int8, k_int8, v_fp8, q_descale, k_descale, v_descale, FP8_MAX
 
 
 def get_config_cache_filename(batch_size, num_heads, seq_len_q, seq_len_k, head_dim, layout):
@@ -256,13 +278,17 @@ def bench_worker(
             except:
                 pass
 
-        # Generate high-precision inputs (wrapper handles quantization internally)
-        q, k, v = get_tensors(batch_size, num_heads, seq_len_q, seq_len_k, head_dim, layout)
+        # Generate quantized inputs
+        q_int8, k_int8, v_fp8, q_descale, k_descale, v_descale, FP8_MAX = get_tensors(
+            batch_size, num_heads, seq_len_q, seq_len_k, head_dim, config, layout
+        )
         
         # Benchmark with config
         ms = triton.testing.do_bench(
-            lambda: fav3_sage_wrapper_func(
-                q, k, v,
+            lambda: fav3_sage_func(
+                q_int8, k_int8, v_fp8,
+                q_descale, k_descale, v_descale,
+                FP8_MAX=FP8_MAX,
                 causal=False,
                 inference_mode=True,
                 layout=layout,
