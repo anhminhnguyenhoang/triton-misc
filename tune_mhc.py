@@ -5,7 +5,8 @@ This script performs systematic exploration of kernel configurations for fused_m
 and sinkhorn_knopp kernels using multi-GPU parallel workers.
 
 Usage:
-    python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --workers 0 1 2 3
+    python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --hres-mode lite --workers 0 1 2 3
+    python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --hres-mode sinkhorn --workers 0 1 2 3
     python tune_mhc.py --kernel sinkhorn_knopp -M 1024 2048 4096 -n 8 --sinkhorn-iters 20
 """
 
@@ -67,29 +68,35 @@ def get_autotune_config(config_file, kernel):
     if kernel == "fused_mhc":
         # Extract parameter ranges for fused_mhc
         block_m = kernel_space.get("BLOCK_M", [64])
+        block_n = kernel_space.get("BLOCK_N", [16])
         block_k = kernel_space.get("BLOCK_K", [64])
         num_ksplit = kernel_space.get("NUM_KSPLIT", [1])
         num_warps = kernel_space.get("num_warps", [4])
         num_stages = kernel_space.get("num_stages", [1])
         waves_per_eu = kernel_space.get("waves_per_eu", [2])
+        hres_op = kernel_space.get("HRES_OP", [0])
 
         configs = []
-        for bm, bk, nks, nw, ns, wpe in itertools.product(
+        for bm, bn, bk, nks, nw, ns, wpe, hop in itertools.product(
             block_m,
+            block_n,
             block_k,
             num_ksplit,
             num_warps,
             num_stages,
             waves_per_eu,
+            hres_op,
         ):
             configs.append(
                 dict(
                     BLOCK_M=bm,
+                    BLOCK_N=bn,
                     BLOCK_K=bk,
                     NUM_KSPLIT=nks,
                     num_warps=nw,
                     num_stages=ns,
                     waves_per_eu=wpe,
+                    HRES_OP=hop,
                 )
             )
     elif kernel == "sinkhorn_knopp":
@@ -120,7 +127,7 @@ def get_autotune_config(config_file, kernel):
     return configs
 
 
-def get_tensors_fused_mhc(M, n, C, dtype):
+def get_tensors_fused_mhc(M, n, C, dtype, hres_mode="lite"):
     """
     Generate input tensors for fused_mhc benchmarking.
 
@@ -129,12 +136,13 @@ def get_tensors_fused_mhc(M, n, C, dtype):
         n: Stream parameter (manifold dimension)
         C: Hidden dimension per stream
         dtype: Data type
+        hres_mode: H_res computation mode ("lite" or "sinkhorn")
 
     Returns:
         Tuple of tensors for fused_mhc
     """
     x, phi_pre, phi_post, phi_res, alpha_pre, alpha_post, alpha_res, bias, n_streams = \
-        generate_mhc_inputs(M, n, C, dtype)
+        generate_mhc_inputs(M, n, C, dtype, hres_mode=hres_mode)
     return x, phi_pre, phi_post, phi_res, alpha_pre, alpha_post, alpha_res, bias, n_streams
 
 
@@ -155,20 +163,20 @@ def get_tensors_sinkhorn(M, n, dtype):
     return logits
 
 
-def get_config_cache_filename(kernel, M, n, C, sinkhorn_iters):
+def get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode=None):
     """Generate cache filename for tracking tested configs."""
     if kernel == "fused_mhc":
-        return f"tested_configs_mhc_{kernel}_M{M}_n{n}_C{C}.json"
+        return f"tested_configs_mhc_{kernel}_{hres_mode}_M{M}_n{n}_C{C}.json"
     else:  # sinkhorn_knopp
         return f"tested_configs_mhc_{kernel}_M{M}_n{n}_iters{sinkhorn_iters}.json"
 
 
-def load_tested_configs(kernel, M, n, C, sinkhorn_iters, config_file):
+def load_tested_configs(kernel, M, n, C, sinkhorn_iters, config_file, hres_mode=None):
     """
     Load set of already tested config indices from disk.
     Returns empty set if config_file doesn't match (different tuning space).
     """
-    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters)
+    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode)
     try:
         with open(cache_file, "r") as f:
             data = json.load(f)
@@ -193,13 +201,13 @@ def load_tested_configs(kernel, M, n, C, sinkhorn_iters, config_file):
 
 
 def save_tested_config(
-    kernel, M, n, C, sinkhorn_iters, config_idx, config, config_file, success=True, error_msg=None
+    kernel, M, n, C, sinkhorn_iters, config_idx, config, config_file, success=True, error_msg=None, hres_mode=None
 ):
     """
     Save a tested config to disk with file locking to prevent race conditions.
     Separates successful and failed configs for easy inspection.
     """
-    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters)
+    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode)
 
     # Use file locking to ensure atomic read-modify-write
     max_retries = 10
@@ -226,6 +234,7 @@ def save_tested_config(
                             "n": n,
                             "C": C,
                             "sinkhorn_iters": sinkhorn_iters,
+                            "hres_mode": hres_mode,
                             "config_file": config_file,
                             "tested_configs_successful": {},
                             "tested_configs_failed": {},
@@ -278,7 +287,7 @@ def save_tested_config(
 
 
 def bench_worker_fused_mhc(
-    results_queue, M, n, C, dtype, config, config_idx, config_file, device_id=None
+    results_queue, M, n, C, dtype, config, config_idx, config_file, hres_mode, device_id=None
 ):
     """Worker function to run fused_mhc benchmark and put result in queue immediately."""
     try:
@@ -295,7 +304,7 @@ def bench_worker_fused_mhc(
 
         # Generate inputs
         x, phi_pre, phi_post, phi_res, alpha_pre, alpha_post, alpha_res, bias, n_streams = \
-            get_tensors_fused_mhc(M, n, C, dtype)
+            get_tensors_fused_mhc(M, n, C, dtype, hres_mode)
 
         # Benchmark with config
         ms = triton.testing.do_bench(
@@ -303,6 +312,7 @@ def bench_worker_fused_mhc(
                 x, phi_pre, phi_post, phi_res,
                 alpha_pre, alpha_post, alpha_res,
                 bias, n_streams,
+                hres_mode=hres_mode,
                 config=config,
             ),
             warmup=25,
@@ -317,7 +327,7 @@ def bench_worker_fused_mhc(
                 pass
 
         # Save that this config was tested successfully
-        save_tested_config("fused_mhc", M, n, C, 0, config_idx, config, config_file, success=True)
+        save_tested_config("fused_mhc", M, n, C, 0, config_idx, config, config_file, success=True, hres_mode=hres_mode)
 
         # Put result in queue immediately
         results_queue.put(
@@ -342,7 +352,7 @@ def bench_worker_fused_mhc(
 
         # Save failed config with error message
         save_tested_config(
-            "fused_mhc", M, n, C, 0, config_idx, config, config_file, success=False, error_msg=error_msg
+            "fused_mhc", M, n, C, 0, config_idx, config, config_file, success=False, error_msg=error_msg, hres_mode=hres_mode
         )
 
         # Put failure result in queue
@@ -439,6 +449,7 @@ def result_monitor(
     n,
     C,
     sinkhorn_iters,
+    hres_mode,
     fname,
     stop_event,
     tested_configs_file,
@@ -455,6 +466,7 @@ def result_monitor(
     valid_count = 0
     failed_count = 0
     configs_since_improvement = 0
+    last_progress_print = 0  # Track when we last printed progress
 
     # Load existing best configs if available
     try:
@@ -464,8 +476,8 @@ def result_monitor(
         best_configs = {}
 
     if kernel == "fused_mhc":
-        shape_str = f"M={M}, n={n}, C={C}"
-        config_key = f"M{M}_n{n}_C{C}"
+        shape_str = f"M={M}, n={n}, C={C}, mode={hres_mode}"
+        config_key = f"M{M}_n{n}_C{C}_{hres_mode}"
     else:
         shape_str = f"M={M}, n={n}, iters={sinkhorn_iters}"
         config_key = f"M{M}_n{n}_iters{sinkhorn_iters}"
@@ -475,6 +487,7 @@ def result_monitor(
     print(
         f"[Monitor] Will stop early if no improvement after {max_configs_without_improvement} configs"
     )
+    sys.stdout.flush()
 
     while valid_count + failed_count < total_configs:
         try:
@@ -483,6 +496,7 @@ def result_monitor(
 
             config_idx = result["config_idx"]
             config = result["config"]
+            total_processed = valid_count + failed_count + 1  # +1 for current result
 
             if result["success"]:
                 time_ms = result["time_ms"]
@@ -504,6 +518,7 @@ def result_monitor(
                         "n": n,
                         "C": C,
                         "sinkhorn_iters": sinkhorn_iters,
+                        "hres_mode": hres_mode,
                     }
 
                     # Write to file immediately
@@ -511,8 +526,11 @@ def result_monitor(
                         json.dump(best_configs, f, indent=2)
 
                     print(
-                        f"[Monitor] ✓ New best! Config {config_idx+1}/{total_configs}: {time_ms:.3f} ms"
+                        f"[Monitor] ✓ New best! Config {config_idx+1}/{total_configs}: {time_ms:.3f} ms "
+                        f"(Progress: {total_processed}/{total_configs})"
                     )
+                    sys.stdout.flush()
+                    last_progress_print = total_processed
                 else:
                     configs_since_improvement += 1
 
@@ -524,15 +542,9 @@ def result_monitor(
                         print(
                             f"[Monitor] Best config found: {best_time:.3f} ms at index {best_config_idx + 1}"
                         )
+                        sys.stdout.flush()
                         stop_event.set()  # Signal workers to stop
                         break
-
-                    if (valid_count + failed_count) % 50 == 0:
-                        print(
-                            f"[Monitor] Progress: {valid_count + failed_count}/{total_configs} "
-                            f"(Valid: {valid_count}, Failed: {failed_count}, Best: {best_time:.3f} ms, "
-                            f"No improvement: {configs_since_improvement}/{max_configs_without_improvement})"
-                        )
             else:
                 failed_count += 1
                 configs_since_improvement += 1
@@ -546,6 +558,7 @@ def result_monitor(
                         print(
                             f"[Monitor] Best config found: {best_time:.3f} ms at index {best_config_idx + 1}"
                         )
+                    sys.stdout.flush()
                     stop_event.set()  # Signal workers to stop
                     break
 
@@ -553,16 +566,24 @@ def result_monitor(
                     print(
                         f"[Monitor] ✗ Config {config_idx+1}/{total_configs} failed: {result.get('error', 'Unknown error')}"
                     )
-                elif failed_count % 50 == 0:
-                    print(
-                        f"[Monitor] Progress: {valid_count + failed_count}/{total_configs} "
-                        f"(Valid: {valid_count}, Failed: {failed_count})"
-                    )
+                    sys.stdout.flush()
+
+            # Print progress every 50 configs (regardless of success/failure)
+            if total_processed - last_progress_print >= 50:
+                best_str = f"{best_time:.3f} ms" if best_config is not None else "N/A"
+                print(
+                    f"[Monitor] Progress: {total_processed}/{total_configs} "
+                    f"(Valid: {valid_count}, Failed: {failed_count}, Best: {best_str}, "
+                    f"No improvement: {configs_since_improvement}/{max_configs_without_improvement})"
+                )
+                sys.stdout.flush()
+                last_progress_print = total_processed
 
         except Empty:
             # Timeout - check if we should stop
             if stop_event and stop_event.is_set():
                 print(f"[Monitor] Stop signal received, exiting...")
+                sys.stdout.flush()
                 break
             continue
 
@@ -585,6 +606,7 @@ def result_monitor(
         print(f"[Monitor] WARNING: No valid configuration found!")
 
     print(f"[Monitor] {'='*80}\n")
+    sys.stdout.flush()
 
     return best_config, best_time
 
@@ -598,6 +620,7 @@ def worker_batch_fused_mhc(
     configs_indexed,
     stop_event,
     config_file,
+    hres_mode,
     device_id=None,
 ):
     """
@@ -617,7 +640,7 @@ def worker_batch_fused_mhc(
             break
 
         bench_worker_fused_mhc(
-            results_queue, M, n, C, dtype, config, original_idx, config_file, device_id
+            results_queue, M, n, C, dtype, config, original_idx, config_file, hres_mode, device_id
         )
 
 
@@ -686,15 +709,23 @@ def parse_args():
     )
     parser.add_argument(
         "-C",
+        nargs="+",
         type=int,
-        default=1024,
-        help="Hidden dimension per stream (for fused_mhc)",
+        default=[1024],
+        help="List of hidden dimensions per stream (each C runs as separate tuning)",
     )
     parser.add_argument(
         "--sinkhorn-iters",
         type=int,
         default=20,
         help="Number of Sinkhorn-Knopp iterations (for sinkhorn_knopp)",
+    )
+    parser.add_argument(
+        "--hres-mode",
+        type=str,
+        default="lite",
+        choices=["lite", "sinkhorn"],
+        help="H_res computation mode for fused_mhc (lite or sinkhorn)",
     )
 
     # Data type
@@ -752,23 +783,26 @@ def main():
     if args.num_workers is not None and args.workers is not None:
         raise ValueError("Cannot specify both --num-workers and --workers. Use only one.")
 
-    start_time = datetime.now()
+    overall_start_time = datetime.now()
 
     kernel = args.kernel
     dtype = arg_to_torch_dtype[args.dtype]
     M_list = args.M
     n = args.n
-    C = args.C
+    C_list = args.C
     sinkhorn_iters = args.sinkhorn_iters
+    hres_mode = args.hres_mode
 
     print(f"Tuning kernel: {kernel}")
     print(f"M values: {M_list}")
     print(f"n: {n}")
     if kernel == "fused_mhc":
-        print(f"C: {C}")
+        print(f"C values: {C_list}")
+        print(f"H_res mode: {hres_mode}")
     else:
         print(f"Sinkhorn iterations: {sinkhorn_iters}")
     print(f"Data type: {args.dtype}")
+    sys.stdout.flush()
 
     configs = get_autotune_config(args.config_file, kernel)
 
@@ -778,14 +812,7 @@ def main():
     random.shuffle(config_indices)
 
     print(f"Total configurations to tune: {len(configs)} (shuffled randomly)")
-
-    # Generate output filename
-    if kernel == "fused_mhc":
-        M_str = '_'.join(str(m) for m in M_list)
-        fname = f"best_configs_mhc_{kernel}_M{M_str}_n{n}_C{C}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    else:
-        M_str = '_'.join(str(m) for m in M_list)
-        fname = f"best_configs_mhc_{kernel}_M{M_str}_n{n}_iters{sinkhorn_iters}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    sys.stdout.flush()
 
     # Determine number of workers and device IDs
     num_gpus = torch.cuda.device_count() if torch.cuda.is_available() else 0
@@ -817,146 +844,193 @@ def main():
         else:
             print(f"No GPUs detected, using {num_workers} CPU workers")
 
-    # Process each M value
-    for M in M_list:
-        print(f"\n{'='*80}")
+    # Track output files for each C value
+    output_files = []
+
+    # Process each C value as a completely separate tuning run
+    for C in C_list:
+        c_start_time = datetime.now()
+
+        print(f"\n{'#'*80}")
+        print(f"# TUNING C={C}")
+        print(f"{'#'*80}")
+        sys.stdout.flush()
+
+        # Generate C-specific output filename
         if kernel == "fused_mhc":
-            print(f"Starting tuning for {kernel}: M={M}, n={n}, C={C}")
+            M_str = '_'.join(str(m) for m in M_list)
+            fname = f"best_configs_mhc_{kernel}_{hres_mode}_M{M_str}_n{n}_C{C}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         else:
-            print(f"Starting tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}")
-        print(f"{'='*80}")
+            M_str = '_'.join(str(m) for m in M_list)
+            fname = f"best_configs_mhc_{kernel}_M{M_str}_n{n}_iters{sinkhorn_iters}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
-        # Load already tested config indices for this shape
-        tested_indices = load_tested_configs(kernel, M, n, C, sinkhorn_iters, args.config_file)
-        if tested_indices:
-            # Convert string keys back to integers
-            tested_indices = {int(idx) for idx in tested_indices}
-            print(
-                f"[Main] Found {len(tested_indices)} previously tested configs, will skip them"
-            )
+        output_files.append(fname)
 
-        # Filter out already-tested configs using shuffled indices
-        configs_to_test = []
-        for shuffled_idx in config_indices:
-            if shuffled_idx not in tested_indices:
-                configs_to_test.append((shuffled_idx, configs[shuffled_idx]))
-
-        if not configs_to_test:
-            print(
-                f"[Main] All {len(configs)} configs already tested for this shape, skipping..."
-            )
-            continue
-
-        print(
-            f"[Main] Testing {len(configs_to_test)}/{len(configs)} configs (skipping {len(tested_indices)} already tested)"
-        )
-
-        # Create a multiprocessing Queue for results
-        results_queue = Queue()
-
-        # Generate the tested configs filename for this shape
-        tested_configs_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters)
-
-        # Start the result monitor process
-        stop_event = Event()
-
-        monitor_process = Process(
-            target=result_monitor,
-            args=(
-                results_queue,
-                len(configs_to_test),
-                kernel,
-                M,
-                n,
-                C,
-                sinkhorn_iters,
-                fname,
-                stop_event,
-                tested_configs_file,
-                args.max_configs_without_improvement,
-            ),
-        )
-        monitor_process.start()
-
-        # Launch worker processes
-        worker_processes = []
-        configs_per_worker = len(configs_to_test) // num_workers
-        remainder = len(configs_to_test) % num_workers
-
-        config_start = 0
-        for worker_id in range(num_workers):
-            # Distribute configs evenly, with remainder distributed to first workers
-            num_configs_for_worker = configs_per_worker + (
-                1 if worker_id < remainder else 0
-            )
-            config_end = config_start + num_configs_for_worker
-
-            worker_configs_indexed = configs_to_test[config_start:config_end]
-
-            # Assign GPU device - use specific device_id or round-robin
-            device_id = device_ids[worker_id % len(device_ids)]
-
-            # Create worker process based on kernel type
+        # Process each M value for this C
+        for M in M_list:
+            print(f"\n{'='*80}")
             if kernel == "fused_mhc":
-                worker_process = Process(
-                    target=worker_batch_fused_mhc,
-                    args=(
-                        results_queue,
-                        M,
-                        n,
-                        C,
-                        dtype,
-                        worker_configs_indexed,
-                        stop_event,
-                        args.config_file,
-                        device_id,
-                    ),
+                print(f"Starting tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}")
+            else:
+                print(f"Starting tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}")
+            print(f"{'='*80}")
+            sys.stdout.flush()
+
+            # Load already tested config indices for this shape
+            tested_indices = load_tested_configs(kernel, M, n, C, sinkhorn_iters, args.config_file, hres_mode)
+            if tested_indices:
+                # Convert string keys back to integers
+                tested_indices = {int(idx) for idx in tested_indices}
+                print(
+                    f"[Main] Found {len(tested_indices)} previously tested configs, will skip them"
                 )
-            else:  # sinkhorn_knopp
-                worker_process = Process(
-                    target=worker_batch_sinkhorn,
-                    args=(
-                        results_queue,
-                        M,
-                        n,
-                        sinkhorn_iters,
-                        dtype,
-                        worker_configs_indexed,
-                        stop_event,
-                        args.config_file,
-                        device_id,
-                    ),
+                sys.stdout.flush()
+
+            # Filter out already-tested configs using shuffled indices
+            configs_to_test = []
+            for shuffled_idx in config_indices:
+                if shuffled_idx not in tested_indices:
+                    configs_to_test.append((shuffled_idx, configs[shuffled_idx]))
+
+            if not configs_to_test:
+                print(
+                    f"[Main] All {len(configs)} configs already tested for this shape, skipping..."
                 )
+                sys.stdout.flush()
+                continue
 
-            worker_processes.append(worker_process)
-            worker_process.start()
+            print(
+                f"[Main] Testing {len(configs_to_test)}/{len(configs)} configs (skipping {len(tested_indices)} already tested)"
+            )
+            sys.stdout.flush()
 
-            config_start = config_end
+            # Create a multiprocessing Queue for results
+            results_queue = Queue()
 
-        # Wait for all workers to complete
-        for worker_process in worker_processes:
-            worker_process.join()
+            # Generate the tested configs filename for this shape
+            tested_configs_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode)
 
-        # Wait for monitor to finish processing all results
-        monitor_process.join()
+            # Start the result monitor process
+            stop_event = Event()
 
-        if kernel == "fused_mhc":
-            print(f"[Main] Completed tuning for {kernel}: M={M}, n={n}, C={C}\n")
-        else:
-            print(f"[Main] Completed tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}\n")
+            monitor_process = Process(
+                target=result_monitor,
+                args=(
+                    results_queue,
+                    len(configs_to_test),
+                    kernel,
+                    M,
+                    n,
+                    C,
+                    sinkhorn_iters,
+                    hres_mode,
+                    fname,
+                    stop_event,
+                    tested_configs_file,
+                    args.max_configs_without_improvement,
+                ),
+            )
+            monitor_process.start()
 
-    end_time = datetime.now()
-    total_time = end_time - start_time
+            # Launch worker processes
+            worker_processes = []
+            configs_per_worker = len(configs_to_test) // num_workers
+            remainder = len(configs_to_test) % num_workers
+
+            config_start = 0
+            for worker_id in range(num_workers):
+                # Distribute configs evenly, with remainder distributed to first workers
+                num_configs_for_worker = configs_per_worker + (
+                    1 if worker_id < remainder else 0
+                )
+                config_end = config_start + num_configs_for_worker
+
+                worker_configs_indexed = configs_to_test[config_start:config_end]
+
+                # Assign GPU device - use specific device_id or round-robin
+                device_id = device_ids[worker_id % len(device_ids)]
+
+                # Create worker process based on kernel type
+                if kernel == "fused_mhc":
+                    worker_process = Process(
+                        target=worker_batch_fused_mhc,
+                        args=(
+                            results_queue,
+                            M,
+                            n,
+                            C,
+                            dtype,
+                            worker_configs_indexed,
+                            stop_event,
+                            args.config_file,
+                            hres_mode,
+                            device_id,
+                        ),
+                    )
+                else:  # sinkhorn_knopp
+                    worker_process = Process(
+                        target=worker_batch_sinkhorn,
+                        args=(
+                            results_queue,
+                            M,
+                            n,
+                            sinkhorn_iters,
+                            dtype,
+                            worker_configs_indexed,
+                            stop_event,
+                            args.config_file,
+                            device_id,
+                        ),
+                    )
+
+                worker_processes.append(worker_process)
+                worker_process.start()
+
+                config_start = config_end
+
+            # Wait for all workers to complete
+            for worker_process in worker_processes:
+                worker_process.join()
+
+            # Wait for monitor to finish processing all results
+            monitor_process.join()
+
+            if kernel == "fused_mhc":
+                print(f"[Main] Completed tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}\n")
+            else:
+                print(f"[Main] Completed tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}\n")
+            sys.stdout.flush()
+
+        # Per-C summary
+        c_end_time = datetime.now()
+        c_total_time = c_end_time - c_start_time
+
+        print(f"\n{'-'*80}")
+        print(f"COMPLETED C={C}")
+        print(f"  Time: {c_total_time}")
+        print(f"  M values tuned: {len(M_list)}")
+        print(f"  Results saved to: {fname}")
+        print(f"{'-'*80}")
+        sys.stdout.flush()
+
+    overall_end_time = datetime.now()
+    overall_total_time = overall_end_time - overall_start_time
 
     print(f"\n{'='*80}")
     print(f"TUNING COMPLETE")
     print(f"  Kernel: {kernel}")
-    print(f"  Total time: {total_time}")
-    print(f"  M values tuned: {len(M_list)}")
+    if kernel == "fused_mhc":
+        print(f"  H_res mode: {hres_mode}")
+        print(f"  C values tuned: {C_list}")
+    print(f"  Total time: {overall_total_time}")
+    print(f"  M values per C: {len(M_list)}")
     print(f"  Configs per M value: {len(configs)}")
-    print(f"  Total benchmarks: {len(M_list) * len(configs)}")
-    print(f"  Results saved to: {fname}")
+    print(f"  Total benchmarks: {len(C_list) * len(M_list) * len(configs)}")
+    print(f"  Output files:")
+    for f in output_files:
+        print(f"    - {f}")
     print(f"{'='*80}")
+    sys.stdout.flush()
 
 
 if __name__ == "__main__":
