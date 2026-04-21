@@ -7,7 +7,7 @@ and sinkhorn_knopp kernels using multi-GPU parallel workers.
 Usage:
     python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --hres-mode lite --workers 0 1 2 3
     python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --hres-mode sinkhorn --workers 0 1 2 3
-    python tune_mhc.py --kernel sinkhorn_knopp -M 1024 2048 4096 -n 8 --sinkhorn-iters 20
+    python tune_mhc.py --kernel sinkhorn_knopp -M 1024 2048 4096 -n 8 -C 1024 --sinkhorn-iters 20
 """
 
 import argparse
@@ -26,7 +26,6 @@ import random
 
 from aiter.ops.triton.fusions.mhc import fused_mhc, sinkhorn_knopp
 from op_tests.triton_tests.utils.mhc_ref import generate_mhc_inputs
-
 
 arg_to_torch_dtype = {
     "fp16": torch.float16,
@@ -74,10 +73,9 @@ def get_autotune_config(config_file, kernel):
         num_warps = kernel_space.get("num_warps", [4])
         num_stages = kernel_space.get("num_stages", [1])
         waves_per_eu = kernel_space.get("waves_per_eu", [2])
-        hres_op = kernel_space.get("HRES_OP", [0])
 
         configs = []
-        for bm, bn, bk, nks, nw, ns, wpe, hop in itertools.product(
+        for bm, bn, bk, nks, nw, ns, wpe in itertools.product(
             block_m,
             block_n,
             block_k,
@@ -85,7 +83,6 @@ def get_autotune_config(config_file, kernel):
             num_warps,
             num_stages,
             waves_per_eu,
-            hres_op,
         ):
             configs.append(
                 dict(
@@ -96,7 +93,6 @@ def get_autotune_config(config_file, kernel):
                     num_warps=nw,
                     num_stages=ns,
                     waves_per_eu=wpe,
-                    HRES_OP=hop,
                 )
             )
     elif kernel == "sinkhorn_knopp":
@@ -139,11 +135,13 @@ def get_tensors_fused_mhc(M, n, C, dtype, hres_mode="lite"):
         hres_mode: H_res computation mode ("lite" or "sinkhorn")
 
     Returns:
-        Tuple of tensors for fused_mhc
+        Tuple of (x, phi, alpha_pre, alpha_post, alpha_res, bias, n) for fused_mhc
     """
-    x, phi_pre, phi_post, phi_res, alpha_pre, alpha_post, alpha_res, bias, n_streams = \
-        generate_mhc_inputs(M, n, C, dtype, hres_mode=hres_mode)
-    return x, phi_pre, phi_post, phi_res, alpha_pre, alpha_post, alpha_res, bias, n_streams
+    mode = "mhc_lite" if hres_mode == "lite" else "mhc"
+    x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val = (
+        generate_mhc_inputs(M, n, C, dtype, mode=mode)
+    )
+    return (x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val)
 
 
 def get_tensors_sinkhorn(M, n, dtype):
@@ -159,7 +157,7 @@ def get_tensors_sinkhorn(M, n, dtype):
         3D tensor of shape (M, n, n) for sinkhorn_knopp
     """
     # Generate random logits for Sinkhorn-Knopp
-    logits = torch.randn((M, n, n), device='cuda', dtype=dtype)
+    logits = torch.randn((M, n, n), device="cuda", dtype=dtype)
     return logits
 
 
@@ -201,7 +199,17 @@ def load_tested_configs(kernel, M, n, C, sinkhorn_iters, config_file, hres_mode=
 
 
 def save_tested_config(
-    kernel, M, n, C, sinkhorn_iters, config_idx, config, config_file, success=True, error_msg=None, hres_mode=None
+    kernel,
+    M,
+    n,
+    C,
+    sinkhorn_iters,
+    config_idx,
+    config,
+    config_file,
+    success=True,
+    error_msg=None,
+    hres_mode=None,
 ):
     """
     Save a tested config to disk with file locking to prevent race conditions.
@@ -287,7 +295,16 @@ def save_tested_config(
 
 
 def bench_worker_fused_mhc(
-    results_queue, M, n, C, dtype, config, config_idx, config_file, hres_mode, device_id=None
+    results_queue,
+    M,
+    n,
+    C,
+    dtype,
+    config,
+    config_idx,
+    config_file,
+    hres_mode,
+    device_id=None,
 ):
     """Worker function to run fused_mhc benchmark and put result in queue immediately."""
     try:
@@ -303,15 +320,20 @@ def bench_worker_fused_mhc(
                 pass
 
         # Generate inputs
-        x, phi_pre, phi_post, phi_res, alpha_pre, alpha_post, alpha_res, bias, n_streams = \
+        (x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val) = (
             get_tensors_fused_mhc(M, n, C, dtype, hres_mode)
+        )
 
         # Benchmark with config
         ms = triton.testing.do_bench(
             lambda: fused_mhc(
-                x, phi_pre, phi_post, phi_res,
-                alpha_pre, alpha_post, alpha_res,
-                bias, n_streams,
+                x,
+                phi,
+                alpha_pre,
+                alpha_post,
+                alpha_res,
+                bias,
+                n_val,
                 hres_mode=hres_mode,
                 config=config,
             ),
@@ -327,7 +349,18 @@ def bench_worker_fused_mhc(
                 pass
 
         # Save that this config was tested successfully
-        save_tested_config("fused_mhc", M, n, C, 0, config_idx, config, config_file, success=True, hres_mode=hres_mode)
+        save_tested_config(
+            "fused_mhc",
+            M,
+            n,
+            C,
+            0,
+            config_idx,
+            config,
+            config_file,
+            success=True,
+            hres_mode=hres_mode,
+        )
 
         # Put result in queue immediately
         results_queue.put(
@@ -352,7 +385,17 @@ def bench_worker_fused_mhc(
 
         # Save failed config with error message
         save_tested_config(
-            "fused_mhc", M, n, C, 0, config_idx, config, config_file, success=False, error_msg=error_msg, hres_mode=hres_mode
+            "fused_mhc",
+            M,
+            n,
+            C,
+            0,
+            config_idx,
+            config,
+            config_file,
+            success=False,
+            error_msg=error_msg,
+            hres_mode=hres_mode,
         )
 
         # Put failure result in queue
@@ -368,7 +411,16 @@ def bench_worker_fused_mhc(
 
 
 def bench_worker_sinkhorn(
-    results_queue, M, n, sinkhorn_iters, dtype, config, config_idx, config_file, device_id=None
+    results_queue,
+    M,
+    n,
+    C,
+    sinkhorn_iters,
+    dtype,
+    config,
+    config_idx,
+    config_file,
+    device_id=None,
 ):
     """Worker function to run sinkhorn_knopp benchmark and put result in queue immediately."""
     try:
@@ -388,7 +440,7 @@ def bench_worker_sinkhorn(
 
         # Benchmark with config
         ms = triton.testing.do_bench(
-            lambda: sinkhorn_knopp(logits, num_iters=sinkhorn_iters, config=config),
+            lambda: sinkhorn_knopp(logits, C, num_iters=sinkhorn_iters, config=config),
             warmup=25,
             rep=100,
         )
@@ -401,7 +453,17 @@ def bench_worker_sinkhorn(
                 pass
 
         # Save that this config was tested successfully
-        save_tested_config("sinkhorn_knopp", M, n, 0, sinkhorn_iters, config_idx, config, config_file, success=True)
+        save_tested_config(
+            "sinkhorn_knopp",
+            M,
+            n,
+            0,
+            sinkhorn_iters,
+            config_idx,
+            config,
+            config_file,
+            success=True,
+        )
 
         # Put result in queue immediately
         results_queue.put(
@@ -426,7 +488,16 @@ def bench_worker_sinkhorn(
 
         # Save failed config with error message
         save_tested_config(
-            "sinkhorn_knopp", M, n, 0, sinkhorn_iters, config_idx, config, config_file, success=False, error_msg=error_msg
+            "sinkhorn_knopp",
+            M,
+            n,
+            0,
+            sinkhorn_iters,
+            config_idx,
+            config,
+            config_file,
+            success=False,
+            error_msg=error_msg,
         )
 
         # Put failure result in queue
@@ -640,7 +711,16 @@ def worker_batch_fused_mhc(
             break
 
         bench_worker_fused_mhc(
-            results_queue, M, n, C, dtype, config, original_idx, config_file, hres_mode, device_id
+            results_queue,
+            M,
+            n,
+            C,
+            dtype,
+            config,
+            original_idx,
+            config_file,
+            hres_mode,
+            device_id,
         )
 
 
@@ -648,6 +728,7 @@ def worker_batch_sinkhorn(
     results_queue,
     M,
     n,
+    C,
     sinkhorn_iters,
     dtype,
     configs_indexed,
@@ -672,7 +753,16 @@ def worker_batch_sinkhorn(
             break
 
         bench_worker_sinkhorn(
-            results_queue, M, n, sinkhorn_iters, dtype, config, original_idx, config_file, device_id
+            results_queue,
+            M,
+            n,
+            C,
+            sinkhorn_iters,
+            dtype,
+            config,
+            original_idx,
+            config_file,
+            device_id,
         )
 
 
@@ -756,7 +846,7 @@ def parse_args():
     parser.add_argument(
         "--config-file",
         type=str,
-        default="tuning_space_mhc.json",
+        default="tuning_results/tuning_space_mhc.json",
         help="Path to JSON file containing tuning space configuration",
     )
     parser.add_argument(
@@ -781,7 +871,9 @@ def main():
 
     # Validate that both --num-workers and --workers are not provided
     if args.num_workers is not None and args.workers is not None:
-        raise ValueError("Cannot specify both --num-workers and --workers. Use only one.")
+        raise ValueError(
+            "Cannot specify both --num-workers and --workers. Use only one."
+        )
 
     overall_start_time = datetime.now()
 
@@ -796,8 +888,8 @@ def main():
     print(f"Tuning kernel: {kernel}")
     print(f"M values: {M_list}")
     print(f"n: {n}")
+    print(f"C values: {C_list}")
     if kernel == "fused_mhc":
-        print(f"C values: {C_list}")
         print(f"H_res mode: {hres_mode}")
     else:
         print(f"Sinkhorn iterations: {sinkhorn_iters}")
@@ -828,7 +920,9 @@ def main():
         device_ids = list(range(num_gpus)) if num_gpus > 0 else [None]
         if num_gpus > 0:
             print(f"Detected {num_gpus} GPU(s)")
-            print(f"Using {num_workers} parallel workers with round-robin GPU assignment")
+            print(
+                f"Using {num_workers} parallel workers with round-robin GPU assignment"
+            )
         else:
             print(f"No GPUs detected, using {num_workers} CPU workers")
     else:
@@ -858,10 +952,10 @@ def main():
 
         # Generate C-specific output filename
         if kernel == "fused_mhc":
-            M_str = '_'.join(str(m) for m in M_list)
+            M_str = "_".join(str(m) for m in M_list)
             fname = f"best_configs_mhc_{kernel}_{hres_mode}_M{M_str}_n{n}_C{C}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         else:
-            M_str = '_'.join(str(m) for m in M_list)
+            M_str = "_".join(str(m) for m in M_list)
             fname = f"best_configs_mhc_{kernel}_M{M_str}_n{n}_iters{sinkhorn_iters}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
 
         output_files.append(fname)
@@ -870,14 +964,20 @@ def main():
         for M in M_list:
             print(f"\n{'='*80}")
             if kernel == "fused_mhc":
-                print(f"Starting tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}")
+                print(
+                    f"Starting tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}"
+                )
             else:
-                print(f"Starting tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}")
+                print(
+                    f"Starting tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}"
+                )
             print(f"{'='*80}")
             sys.stdout.flush()
 
             # Load already tested config indices for this shape
-            tested_indices = load_tested_configs(kernel, M, n, C, sinkhorn_iters, args.config_file, hres_mode)
+            tested_indices = load_tested_configs(
+                kernel, M, n, C, sinkhorn_iters, args.config_file, hres_mode
+            )
             if tested_indices:
                 # Convert string keys back to integers
                 tested_indices = {int(idx) for idx in tested_indices}
@@ -908,7 +1008,9 @@ def main():
             results_queue = Queue()
 
             # Generate the tested configs filename for this shape
-            tested_configs_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode)
+            tested_configs_file = get_config_cache_filename(
+                kernel, M, n, C, sinkhorn_iters, hres_mode
+            )
 
             # Start the result monitor process
             stop_event = Event()
@@ -974,6 +1076,7 @@ def main():
                             results_queue,
                             M,
                             n,
+                            C,
                             sinkhorn_iters,
                             dtype,
                             worker_configs_indexed,
@@ -996,9 +1099,13 @@ def main():
             monitor_process.join()
 
             if kernel == "fused_mhc":
-                print(f"[Main] Completed tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}\n")
+                print(
+                    f"[Main] Completed tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}\n"
+                )
             else:
-                print(f"[Main] Completed tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}\n")
+                print(
+                    f"[Main] Completed tuning for {kernel}: M={M}, n={n}, iters={sinkhorn_iters}\n"
+                )
             sys.stdout.flush()
 
         # Per-C summary
