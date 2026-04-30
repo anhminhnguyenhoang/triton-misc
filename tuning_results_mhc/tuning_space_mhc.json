@@ -6,7 +6,10 @@
         "NUM_KSPLIT": [1, 2, 4, 8],
         "waves_per_eu": [0, 1, 2],
         "num_stages": [1],
-        "num_warps": [2, 4, 8]
+        "num_warps": [2, 4, 8],
+        "USE_REDUCE_SPLITC": [false, true],
+        "BLOCK_M_SPLITC": [16, 32, 64, 128],
+        "BLOCK_C_SPLITC": [32, 64, 128, 256]
     },
     "sinkhorn_knopp": {
         "BLOCK_M": [1, 2, 4, 8, 16],

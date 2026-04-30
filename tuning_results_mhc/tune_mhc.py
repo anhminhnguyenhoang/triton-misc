@@ -24,7 +24,19 @@ import fcntl  # For file locking
 import itertools
 import random
 
-from aiter.ops.triton.fusions.mhc import fused_mhc, sinkhorn_knopp
+from aiter.ops.triton.fusions.mhc import mhc
+
+# `sinkhorn_knopp` is no longer exported as a public op (its logic is fused into
+# `mhc`). The `--kernel sinkhorn_knopp` mode of this script is therefore broken
+# but kept as a no-op stub to avoid an import error when only `--kernel fused_mhc`
+# is used.
+def sinkhorn_knopp(*args, **kwargs):  # noqa: D401
+    raise RuntimeError(
+        "sinkhorn_knopp is not exported as a standalone op anymore; the SK projection "
+        "is fused into `mhc`. Use `--kernel fused_mhc --hres-mode sinkhorn` instead."
+    )
+
+
 from op_tests.triton_tests.utils.mhc_ref import generate_mhc_inputs
 
 arg_to_torch_dtype = {
@@ -73,19 +85,31 @@ def get_autotune_config(config_file, kernel):
         num_warps = kernel_space.get("num_warps", [4])
         num_stages = kernel_space.get("num_stages", [1])
         waves_per_eu = kernel_space.get("waves_per_eu", [2])
+        use_splitc_list = kernel_space.get("USE_REDUCE_SPLITC", [True])
+        block_m_splitc_list = kernel_space.get("BLOCK_M_SPLITC", [32])
+        block_c_splitc_list = kernel_space.get("BLOCK_C_SPLITC", [128])
 
         configs = []
-        for bm, bn, bk, nks, nw, ns, wpe in itertools.product(
-            block_m,
-            block_n,
-            block_k,
-            num_ksplit,
-            num_warps,
-            num_stages,
-            waves_per_eu,
-        ):
-            configs.append(
-                dict(
+        # Prune: BLOCK_M_SPLITC/BLOCK_C_SPLITC only matter when USE_REDUCE_SPLITC=True.
+        # When False, emit a single inline-path config per GEMM-param tuple to avoid
+        # blowing up the search space with redundant rows.
+        for use_splitc in use_splitc_list:
+            splitc_choices = (
+                list(itertools.product(block_m_splitc_list, block_c_splitc_list))
+                if use_splitc
+                else [(None, None)]
+            )
+            for bm, bn, bk, nks, nw, ns, wpe, (bms, bcs) in itertools.product(
+                block_m,
+                block_n,
+                block_k,
+                num_ksplit,
+                num_warps,
+                num_stages,
+                waves_per_eu,
+                splitc_choices,
+            ):
+                cfg = dict(
                     BLOCK_M=bm,
                     BLOCK_N=bn,
                     BLOCK_K=bk,
@@ -93,8 +117,12 @@ def get_autotune_config(config_file, kernel):
                     num_warps=nw,
                     num_stages=ns,
                     waves_per_eu=wpe,
+                    USE_REDUCE_SPLITC=use_splitc,
                 )
-            )
+                if use_splitc:
+                    cfg["BLOCK_M_SPLITC"] = bms
+                    cfg["BLOCK_C_SPLITC"] = bcs
+                configs.append(cfg)
     elif kernel == "sinkhorn_knopp":
         # Extract parameter ranges for sinkhorn_knopp
         block_m = kernel_space.get("BLOCK_M", [1])
@@ -137,9 +165,11 @@ def get_tensors_fused_mhc(M, n, C, dtype, hres_mode="lite"):
     Returns:
         Tuple of (x, phi, alpha_pre, alpha_post, alpha_res, bias, n) for fused_mhc
     """
-    mode = "mhc_lite" if hres_mode == "lite" else "mhc"
+    # generate_mhc_inputs() no longer takes a `mode` kwarg; the H^res branch
+    # is selected at the kernel call via `sinkhorn_iters` (mapped from hres_mode
+    # in `bench_worker_fused_mhc`).
     x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val = (
-        generate_mhc_inputs(M, n, C, dtype, mode=mode)
+        generate_mhc_inputs(M, n, C, dtype)
     )
     return (x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val)
 
@@ -324,9 +354,14 @@ def bench_worker_fused_mhc(
             get_tensors_fused_mhc(M, n, C, dtype, hres_mode)
         )
 
+        # Map the legacy `hres_mode` flag onto the new `sinkhorn_iters` API:
+        #   "sinkhorn" -> 20 SK iterations (production default)
+        #   "lite"     -> 0  SK iterations (raw H^res logits)
+        sinkhorn_iters_for_call = 20 if hres_mode == "sinkhorn" else 0
+
         # Benchmark with config
         ms = triton.testing.do_bench(
-            lambda: fused_mhc(
+            lambda: mhc(
                 x,
                 phi,
                 alpha_pre,
@@ -334,7 +369,7 @@ def bench_worker_fused_mhc(
                 alpha_res,
                 bias,
                 n_val,
-                hres_mode=hres_mode,
+                sinkhorn_iters=sinkhorn_iters_for_call,
                 config=config,
             ),
             warmup=25,
