@@ -1,0 +1,41 @@
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+Tuning kernel: fused_mhc
+M values: [1024, 2048, 4096, 8192, 16384]
+n: 4
+C values: [128]
+Sinkhorn iterations: 20
+Data type: bf16
+Loaded tuning space from 'tuning_results/tuning_space_mhc.json'
+Total configurations to tune: 5760 (shuffled randomly)
+Using 4 worker(s) on GPU(s): [4, 5, 6, 7]
+
+################################################################################
+# TUNING C=128
+################################################################################
+
+================================================================================
+Starting tuning for fused_mhc: M=1024, n=4, C=128, sinkhorn_iters=20
+================================================================================
+[Main] Testing 5760/5760 configs (skipping 0 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=1024, n=4, C=128, sinkhorn_iters=20
+[Monitor] Waiting for 5760 benchmark results...
+[Monitor] Will stop early if no improvement after 500 configs
+[Monitor] ✓ New best! Config 5018/5760: 0.069 ms (Progress: 1/5760)
+[Monitor] ✓ New best! Config 2396/5760: 0.033 ms (Progress: 2/5760)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 4708/5760: 0.030 ms (Progress: 5/5760)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 371/5760: 0.029 ms (Progress: 13/5760)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 2244/5760: 0.015 ms (Progress: 20/5760)
+[Monitor] Progress: 70/5760 (Valid: 70, Failed: 0, Best: 0.015 ms, No improvement: 50/500)
+[Monitor] ✓ New best! Config 1298/5760: 0.015 ms (Progress: 98/5760)
+[Monitor] Progress: 148/5760 (Valid: 148, Failed: 0, Best: 0.015 ms, No improvement: 50/500)
+[Monitor] Progress: 198/5760 (Valid: 198, Failed: 0, Best: 0.015 ms, No improvement: 100/500)
+[Monitor] Progress: 248/5760 (Valid: 248, Failed: 0, Best: 0.015 ms, No improvement: 150/500)
+[Monitor] ✓ New best! Config 1231/5760: 0.014 ms (Progress: 274/5760)
+[Monitor] Progress: 324/5760 (Valid: 324, Failed: 0, Best: 0.014 ms, No improvement: 50/500)
+[Monitor] ✓ New best! Config 1234/5760: 0.014 ms (Progress: 373/5760)

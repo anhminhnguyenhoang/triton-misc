@@ -1,0 +1,581 @@
+[Thu Apr 30 14:49:23 UTC 2026] === C=512 M='1024 2048 8192' patience=5000 ===
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+Tuning kernel: fused_mhc
+M values: [1024, 2048, 8192]
+n: 4
+C values: [512]
+Sinkhorn iterations: 20
+Data type: bf16
+Loaded tuning space from 'tuning_results/tuning_space_mhc.json'
+Total configurations to tune: 9792 (shuffled randomly)
+Using 4 worker(s) on GPU(s): [4, 5, 6, 7]
+
+################################################################################
+# TUNING C=512
+################################################################################
+
+================================================================================
+Starting tuning for fused_mhc: M=1024, n=4, C=512, sinkhorn_iters=20
+================================================================================
+[Main] Found 272 previously tested configs, will skip them
+[Main] Testing 9520/9792 configs (skipping 272 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=1024, n=4, C=512, sinkhorn_iters=20
+[Monitor] Waiting for 9520 benchmark results...
+[Monitor] Will stop early if no improvement after 5000 configs
+[Monitor] ✓ New best! Config 5195/9520: 0.104 ms (Progress: 1/9520)
+[Monitor] ✓ New best! Config 5518/9520: 0.101 ms (Progress: 2/9520)
+[Monitor] ✓ New best! Config 1523/9520: 0.031 ms (Progress: 4/9520)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 2446/9520: 0.029 ms (Progress: 23/9520)
+[Monitor] ✓ New best! Config 4684/9520: 0.029 ms (Progress: 43/9520)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] Progress: 93/9520 (Valid: 93, Failed: 0, Best: 0.029 ms, No improvement: 50/5000)
+[Monitor] Progress: 143/9520 (Valid: 143, Failed: 0, Best: 0.029 ms, No improvement: 100/5000)
+[Monitor] ✓ New best! Config 1773/9520: 0.028 ms (Progress: 170/9520)
+[Monitor] Progress: 220/9520 (Valid: 220, Failed: 0, Best: 0.028 ms, No improvement: 50/5000)
+[Monitor] Progress: 270/9520 (Valid: 270, Failed: 0, Best: 0.028 ms, No improvement: 100/5000)
+[Monitor] ✓ New best! Config 4691/9520: 0.028 ms (Progress: 292/9520)
+[Monitor] Progress: 342/9520 (Valid: 342, Failed: 0, Best: 0.028 ms, No improvement: 50/5000)
+[Monitor] Progress: 392/9520 (Valid: 392, Failed: 0, Best: 0.028 ms, No improvement: 100/5000)
+[Monitor] Progress: 442/9520 (Valid: 442, Failed: 0, Best: 0.028 ms, No improvement: 150/5000)
+[Monitor] Progress: 492/9520 (Valid: 492, Failed: 0, Best: 0.028 ms, No improvement: 200/5000)
+[Monitor] Progress: 542/9520 (Valid: 542, Failed: 0, Best: 0.028 ms, No improvement: 250/5000)
+[Monitor] Progress: 592/9520 (Valid: 592, Failed: 0, Best: 0.028 ms, No improvement: 300/5000)
+[Monitor] Progress: 642/9520 (Valid: 642, Failed: 0, Best: 0.028 ms, No improvement: 350/5000)
+[Monitor] Progress: 692/9520 (Valid: 692, Failed: 0, Best: 0.028 ms, No improvement: 400/5000)
+[Monitor] Progress: 742/9520 (Valid: 742, Failed: 0, Best: 0.028 ms, No improvement: 450/5000)
+[Monitor] Progress: 792/9520 (Valid: 792, Failed: 0, Best: 0.028 ms, No improvement: 500/5000)
+[Monitor] ✓ New best! Config 2389/9520: 0.026 ms (Progress: 826/9520)
+[Monitor] Progress: 876/9520 (Valid: 876, Failed: 0, Best: 0.026 ms, No improvement: 50/5000)
+[Monitor] Progress: 926/9520 (Valid: 926, Failed: 0, Best: 0.026 ms, No improvement: 100/5000)
+[Monitor] Progress: 976/9520 (Valid: 976, Failed: 0, Best: 0.026 ms, No improvement: 150/5000)
+[Monitor] Progress: 1026/9520 (Valid: 1026, Failed: 0, Best: 0.026 ms, No improvement: 200/5000)
+[Monitor] Progress: 1076/9520 (Valid: 1076, Failed: 0, Best: 0.026 ms, No improvement: 250/5000)
+[Monitor] Progress: 1126/9520 (Valid: 1126, Failed: 0, Best: 0.026 ms, No improvement: 300/5000)
+[Monitor] Progress: 1176/9520 (Valid: 1176, Failed: 0, Best: 0.026 ms, No improvement: 350/5000)
+[Monitor] Progress: 1226/9520 (Valid: 1226, Failed: 0, Best: 0.026 ms, No improvement: 400/5000)
+[Monitor] Progress: 1276/9520 (Valid: 1276, Failed: 0, Best: 0.026 ms, No improvement: 450/5000)
+[Monitor] Progress: 1326/9520 (Valid: 1326, Failed: 0, Best: 0.026 ms, No improvement: 500/5000)
+[Monitor] Progress: 1376/9520 (Valid: 1376, Failed: 0, Best: 0.026 ms, No improvement: 550/5000)
+[Monitor] Progress: 1426/9520 (Valid: 1426, Failed: 0, Best: 0.026 ms, No improvement: 600/5000)
+[Monitor] ✓ New best! Config 110/9520: 0.024 ms (Progress: 1447/9520)
+[Monitor] Progress: 1497/9520 (Valid: 1497, Failed: 0, Best: 0.024 ms, No improvement: 50/5000)
+[Monitor] Progress: 1547/9520 (Valid: 1547, Failed: 0, Best: 0.024 ms, No improvement: 100/5000)
+[Monitor] Progress: 1597/9520 (Valid: 1597, Failed: 0, Best: 0.024 ms, No improvement: 150/5000)
+[Monitor] Progress: 1647/9520 (Valid: 1647, Failed: 0, Best: 0.024 ms, No improvement: 200/5000)
+[Monitor] ✓ New best! Config 109/9520: 0.024 ms (Progress: 1671/9520)
+[Monitor] Progress: 1721/9520 (Valid: 1721, Failed: 0, Best: 0.024 ms, No improvement: 50/5000)
+[Monitor] Progress: 1771/9520 (Valid: 1771, Failed: 0, Best: 0.024 ms, No improvement: 100/5000)
+[Monitor] Progress: 1821/9520 (Valid: 1821, Failed: 0, Best: 0.024 ms, No improvement: 150/5000)
+[Monitor] ✓ New best! Config 114/9520: 0.022 ms (Progress: 1857/9520)
+[Monitor] Progress: 1907/9520 (Valid: 1907, Failed: 0, Best: 0.022 ms, No improvement: 50/5000)
+[Monitor] Progress: 1957/9520 (Valid: 1957, Failed: 0, Best: 0.022 ms, No improvement: 100/5000)
+[Monitor] Progress: 2007/9520 (Valid: 2007, Failed: 0, Best: 0.022 ms, No improvement: 150/5000)
+[Monitor] Progress: 2057/9520 (Valid: 2057, Failed: 0, Best: 0.022 ms, No improvement: 200/5000)
+[Monitor] Progress: 2107/9520 (Valid: 2107, Failed: 0, Best: 0.022 ms, No improvement: 250/5000)
+[Monitor] Progress: 2157/9520 (Valid: 2157, Failed: 0, Best: 0.022 ms, No improvement: 300/5000)
+[Monitor] ✓ New best! Config 112/9520: 0.022 ms (Progress: 2194/9520)
+[Monitor] Progress: 2244/9520 (Valid: 2244, Failed: 0, Best: 0.022 ms, No improvement: 50/5000)
+[Monitor] Progress: 2294/9520 (Valid: 2294, Failed: 0, Best: 0.022 ms, No improvement: 100/5000)
+[Monitor] Progress: 2344/9520 (Valid: 2344, Failed: 0, Best: 0.022 ms, No improvement: 150/5000)
+[Monitor] Progress: 2394/9520 (Valid: 2394, Failed: 0, Best: 0.022 ms, No improvement: 200/5000)
+[Monitor] Progress: 2444/9520 (Valid: 2444, Failed: 0, Best: 0.022 ms, No improvement: 250/5000)
+[Monitor] Progress: 2494/9520 (Valid: 2494, Failed: 0, Best: 0.022 ms, No improvement: 300/5000)
+[Monitor] Progress: 2544/9520 (Valid: 2544, Failed: 0, Best: 0.022 ms, No improvement: 350/5000)
+[Monitor] Progress: 2594/9520 (Valid: 2594, Failed: 0, Best: 0.022 ms, No improvement: 400/5000)
+[Monitor] Progress: 2644/9520 (Valid: 2644, Failed: 0, Best: 0.022 ms, No improvement: 450/5000)
+[Monitor] Progress: 2694/9520 (Valid: 2694, Failed: 0, Best: 0.022 ms, No improvement: 500/5000)
+[Monitor] Progress: 2744/9520 (Valid: 2744, Failed: 0, Best: 0.022 ms, No improvement: 550/5000)
+[Monitor] Progress: 2794/9520 (Valid: 2794, Failed: 0, Best: 0.022 ms, No improvement: 600/5000)
+[Monitor] Progress: 2844/9520 (Valid: 2844, Failed: 0, Best: 0.022 ms, No improvement: 650/5000)
+[Monitor] Progress: 2894/9520 (Valid: 2894, Failed: 0, Best: 0.022 ms, No improvement: 700/5000)
+[Monitor] Progress: 2944/9520 (Valid: 2944, Failed: 0, Best: 0.022 ms, No improvement: 750/5000)
+[Monitor] Progress: 2994/9520 (Valid: 2994, Failed: 0, Best: 0.022 ms, No improvement: 800/5000)
+[Monitor] Progress: 3044/9520 (Valid: 3044, Failed: 0, Best: 0.022 ms, No improvement: 850/5000)
+[Monitor] Progress: 3094/9520 (Valid: 3094, Failed: 0, Best: 0.022 ms, No improvement: 900/5000)
+[Monitor] Progress: 3144/9520 (Valid: 3144, Failed: 0, Best: 0.022 ms, No improvement: 950/5000)
+[Monitor] Progress: 3194/9520 (Valid: 3194, Failed: 0, Best: 0.022 ms, No improvement: 1000/5000)
+[Monitor] Progress: 3244/9520 (Valid: 3244, Failed: 0, Best: 0.022 ms, No improvement: 1050/5000)
+[Monitor] Progress: 3294/9520 (Valid: 3294, Failed: 0, Best: 0.022 ms, No improvement: 1100/5000)
+[Monitor] Progress: 3344/9520 (Valid: 3344, Failed: 0, Best: 0.022 ms, No improvement: 1150/5000)
+[Monitor] Progress: 3394/9520 (Valid: 3394, Failed: 0, Best: 0.022 ms, No improvement: 1200/5000)
+[Monitor] Progress: 3444/9520 (Valid: 3444, Failed: 0, Best: 0.022 ms, No improvement: 1250/5000)
+[Monitor] Progress: 3494/9520 (Valid: 3494, Failed: 0, Best: 0.022 ms, No improvement: 1300/5000)
+[Monitor] Progress: 3544/9520 (Valid: 3544, Failed: 0, Best: 0.022 ms, No improvement: 1350/5000)
+[Monitor] Progress: 3594/9520 (Valid: 3594, Failed: 0, Best: 0.022 ms, No improvement: 1400/5000)
+[Monitor] Progress: 3644/9520 (Valid: 3644, Failed: 0, Best: 0.022 ms, No improvement: 1450/5000)
+[Monitor] Progress: 3694/9520 (Valid: 3694, Failed: 0, Best: 0.022 ms, No improvement: 1500/5000)
+[Monitor] Progress: 3744/9520 (Valid: 3744, Failed: 0, Best: 0.022 ms, No improvement: 1550/5000)
+[Monitor] Progress: 3794/9520 (Valid: 3794, Failed: 0, Best: 0.022 ms, No improvement: 1600/5000)
+[Monitor] Progress: 3844/9520 (Valid: 3844, Failed: 0, Best: 0.022 ms, No improvement: 1650/5000)
+[Monitor] Progress: 3894/9520 (Valid: 3894, Failed: 0, Best: 0.022 ms, No improvement: 1700/5000)
+[Monitor] Progress: 3944/9520 (Valid: 3944, Failed: 0, Best: 0.022 ms, No improvement: 1750/5000)
+[Monitor] Progress: 3994/9520 (Valid: 3994, Failed: 0, Best: 0.022 ms, No improvement: 1800/5000)
+[Monitor] Progress: 4044/9520 (Valid: 4044, Failed: 0, Best: 0.022 ms, No improvement: 1850/5000)
+[Monitor] Progress: 4094/9520 (Valid: 4094, Failed: 0, Best: 0.022 ms, No improvement: 1900/5000)
+[Monitor] Progress: 4144/9520 (Valid: 4144, Failed: 0, Best: 0.022 ms, No improvement: 1950/5000)
+[Monitor] Progress: 4194/9520 (Valid: 4194, Failed: 0, Best: 0.022 ms, No improvement: 2000/5000)
+[Monitor] Progress: 4244/9520 (Valid: 4244, Failed: 0, Best: 0.022 ms, No improvement: 2050/5000)
+[Monitor] Progress: 4294/9520 (Valid: 4294, Failed: 0, Best: 0.022 ms, No improvement: 2100/5000)
+[Monitor] Progress: 4344/9520 (Valid: 4344, Failed: 0, Best: 0.022 ms, No improvement: 2150/5000)
+[Monitor] Progress: 4394/9520 (Valid: 4394, Failed: 0, Best: 0.022 ms, No improvement: 2200/5000)
+[Monitor] Progress: 4444/9520 (Valid: 4444, Failed: 0, Best: 0.022 ms, No improvement: 2250/5000)
+[Monitor] Progress: 4494/9520 (Valid: 4494, Failed: 0, Best: 0.022 ms, No improvement: 2300/5000)
+[Monitor] Progress: 4544/9520 (Valid: 4544, Failed: 0, Best: 0.022 ms, No improvement: 2350/5000)
+[Monitor] Progress: 4594/9520 (Valid: 4594, Failed: 0, Best: 0.022 ms, No improvement: 2400/5000)
+[Monitor] Progress: 4644/9520 (Valid: 4644, Failed: 0, Best: 0.022 ms, No improvement: 2450/5000)
+[Monitor] Progress: 4694/9520 (Valid: 4694, Failed: 0, Best: 0.022 ms, No improvement: 2500/5000)
+[Monitor] Progress: 4744/9520 (Valid: 4744, Failed: 0, Best: 0.022 ms, No improvement: 2550/5000)
+[Monitor] Progress: 4794/9520 (Valid: 4794, Failed: 0, Best: 0.022 ms, No improvement: 2600/5000)
+[Monitor] Progress: 4844/9520 (Valid: 4844, Failed: 0, Best: 0.022 ms, No improvement: 2650/5000)
+[Monitor] Progress: 4894/9520 (Valid: 4894, Failed: 0, Best: 0.022 ms, No improvement: 2700/5000)
+[Monitor] Progress: 4944/9520 (Valid: 4944, Failed: 0, Best: 0.022 ms, No improvement: 2750/5000)
+[Monitor] Progress: 4994/9520 (Valid: 4994, Failed: 0, Best: 0.022 ms, No improvement: 2800/5000)
+[Monitor] Progress: 5044/9520 (Valid: 5044, Failed: 0, Best: 0.022 ms, No improvement: 2850/5000)
+[Monitor] Progress: 5094/9520 (Valid: 5094, Failed: 0, Best: 0.022 ms, No improvement: 2900/5000)
+[Monitor] Progress: 5144/9520 (Valid: 5144, Failed: 0, Best: 0.022 ms, No improvement: 2950/5000)
+[Monitor] Progress: 5194/9520 (Valid: 5194, Failed: 0, Best: 0.022 ms, No improvement: 3000/5000)
+[Monitor] Progress: 5244/9520 (Valid: 5244, Failed: 0, Best: 0.022 ms, No improvement: 3050/5000)
+[Monitor] Progress: 5294/9520 (Valid: 5294, Failed: 0, Best: 0.022 ms, No improvement: 3100/5000)
+[Monitor] Progress: 5344/9520 (Valid: 5344, Failed: 0, Best: 0.022 ms, No improvement: 3150/5000)
+[Monitor] Progress: 5394/9520 (Valid: 5394, Failed: 0, Best: 0.022 ms, No improvement: 3200/5000)
+[Monitor] Progress: 5444/9520 (Valid: 5444, Failed: 0, Best: 0.022 ms, No improvement: 3250/5000)
+[Monitor] Progress: 5494/9520 (Valid: 5494, Failed: 0, Best: 0.022 ms, No improvement: 3300/5000)
+[Monitor] Progress: 5544/9520 (Valid: 5544, Failed: 0, Best: 0.022 ms, No improvement: 3350/5000)
+[Monitor] Progress: 5594/9520 (Valid: 5594, Failed: 0, Best: 0.022 ms, No improvement: 3400/5000)
+[Monitor] Progress: 5644/9520 (Valid: 5644, Failed: 0, Best: 0.022 ms, No improvement: 3450/5000)
+[Monitor] Progress: 5694/9520 (Valid: 5694, Failed: 0, Best: 0.022 ms, No improvement: 3500/5000)
+[Monitor] Progress: 5744/9520 (Valid: 5744, Failed: 0, Best: 0.022 ms, No improvement: 3550/5000)
+[Monitor] Progress: 5794/9520 (Valid: 5794, Failed: 0, Best: 0.022 ms, No improvement: 3600/5000)
+[Monitor] Progress: 5844/9520 (Valid: 5844, Failed: 0, Best: 0.022 ms, No improvement: 3650/5000)
+[Monitor] Progress: 5894/9520 (Valid: 5894, Failed: 0, Best: 0.022 ms, No improvement: 3700/5000)
+[Monitor] Progress: 5944/9520 (Valid: 5944, Failed: 0, Best: 0.022 ms, No improvement: 3750/5000)
+[Monitor] Progress: 5994/9520 (Valid: 5994, Failed: 0, Best: 0.022 ms, No improvement: 3800/5000)
+[Monitor] Progress: 6044/9520 (Valid: 6044, Failed: 0, Best: 0.022 ms, No improvement: 3850/5000)
+[Monitor] Progress: 6094/9520 (Valid: 6094, Failed: 0, Best: 0.022 ms, No improvement: 3900/5000)
+[Monitor] Progress: 6144/9520 (Valid: 6144, Failed: 0, Best: 0.022 ms, No improvement: 3950/5000)
+[Monitor] Progress: 6194/9520 (Valid: 6194, Failed: 0, Best: 0.022 ms, No improvement: 4000/5000)
+[Monitor] Progress: 6244/9520 (Valid: 6244, Failed: 0, Best: 0.022 ms, No improvement: 4050/5000)
+[Monitor] Progress: 6294/9520 (Valid: 6294, Failed: 0, Best: 0.022 ms, No improvement: 4100/5000)
+[Monitor] Progress: 6344/9520 (Valid: 6344, Failed: 0, Best: 0.022 ms, No improvement: 4150/5000)
+[Monitor] Progress: 6394/9520 (Valid: 6394, Failed: 0, Best: 0.022 ms, No improvement: 4200/5000)
+[Monitor] Progress: 6444/9520 (Valid: 6444, Failed: 0, Best: 0.022 ms, No improvement: 4250/5000)
+[Monitor] Progress: 6494/9520 (Valid: 6494, Failed: 0, Best: 0.022 ms, No improvement: 4300/5000)
+[Monitor] Progress: 6544/9520 (Valid: 6544, Failed: 0, Best: 0.022 ms, No improvement: 4350/5000)
+[Monitor] Progress: 6594/9520 (Valid: 6594, Failed: 0, Best: 0.022 ms, No improvement: 4400/5000)
+[Monitor] Progress: 6644/9520 (Valid: 6644, Failed: 0, Best: 0.022 ms, No improvement: 4450/5000)
+[Monitor] Progress: 6694/9520 (Valid: 6694, Failed: 0, Best: 0.022 ms, No improvement: 4500/5000)
+[Monitor] Progress: 6744/9520 (Valid: 6744, Failed: 0, Best: 0.022 ms, No improvement: 4550/5000)
+[Monitor] Progress: 6794/9520 (Valid: 6794, Failed: 0, Best: 0.022 ms, No improvement: 4600/5000)
+[Monitor] Progress: 6844/9520 (Valid: 6844, Failed: 0, Best: 0.022 ms, No improvement: 4650/5000)
+[Monitor] Progress: 6894/9520 (Valid: 6894, Failed: 0, Best: 0.022 ms, No improvement: 4700/5000)
+[Monitor] Progress: 6944/9520 (Valid: 6944, Failed: 0, Best: 0.022 ms, No improvement: 4750/5000)
+[Monitor] Progress: 6994/9520 (Valid: 6994, Failed: 0, Best: 0.022 ms, No improvement: 4800/5000)
+[Monitor] Progress: 7044/9520 (Valid: 7044, Failed: 0, Best: 0.022 ms, No improvement: 4850/5000)
+[Monitor] Progress: 7094/9520 (Valid: 7094, Failed: 0, Best: 0.022 ms, No improvement: 4900/5000)
+[Monitor] Progress: 7144/9520 (Valid: 7144, Failed: 0, Best: 0.022 ms, No improvement: 4950/5000)
+
+[Monitor] ⚠️  Early stopping: No improvement for 5000 configs
+[Monitor] Best config found: 0.022 ms at index 112
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=1024, n=4, C=512, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 7194/9520
+[Monitor] Valid results: 7194
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.022 ms
+[Monitor] Best config index: 112
+[Monitor] Best config: {'BLOCK_M': 32, 'BLOCK_N': 16, 'BLOCK_K': 256, 'NUM_KSPLIT': 1, 'num_warps': 4, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': False}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_8192_n4_C512_20260430_144925.json
+[Monitor] ================================================================================
+
+[Worker GPU 7] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Worker GPU 4] Received stop signal, terminating...
+[Worker GPU 6] Received stop signal, terminating...
+[Main] Completed tuning for fused_mhc: M=1024, n=4, C=512, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=2048, n=4, C=512, sinkhorn_iters=20
+================================================================================
+[Main] Found 235 previously tested configs, will skip them
+[Main] Testing 9557/9792 configs (skipping 235 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=2048, n=4, C=512, sinkhorn_iters=20
+[Monitor] Waiting for 9557 benchmark results...
+[Monitor] Will stop early if no improvement after 5000 configs
+[Monitor] ✓ New best! Config 5195/9557: 0.081 ms (Progress: 1/9557)
+[Monitor] ✓ New best! Config 5518/9557: 0.063 ms (Progress: 2/9557)
+[Monitor] ✓ New best! Config 1523/9557: 0.052 ms (Progress: 4/9557)
+[Monitor] ✓ New best! Config 2540/9557: 0.052 ms (Progress: 5/9557)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 6884/9557: 0.049 ms (Progress: 6/9557)
+[Monitor] ✓ New best! Config 5614/9557: 0.047 ms (Progress: 13/9557)
+[Monitor] ✓ New best! Config 3344/9557: 0.046 ms (Progress: 14/9557)
+[Monitor] ✓ New best! Config 2446/9557: 0.031 ms (Progress: 19/9557)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 4684/9557: 0.029 ms (Progress: 43/9557)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] Progress: 93/9557 (Valid: 93, Failed: 0, Best: 0.029 ms, No improvement: 50/5000)
+[Monitor] Progress: 143/9557 (Valid: 143, Failed: 0, Best: 0.029 ms, No improvement: 100/5000)
+[Monitor] ✓ New best! Config 1773/9557: 0.028 ms (Progress: 162/9557)
+[Monitor] Progress: 212/9557 (Valid: 212, Failed: 0, Best: 0.028 ms, No improvement: 50/5000)
+[Monitor] Progress: 262/9557 (Valid: 262, Failed: 0, Best: 0.028 ms, No improvement: 100/5000)
+[Monitor] Progress: 312/9557 (Valid: 312, Failed: 0, Best: 0.028 ms, No improvement: 150/5000)
+[Monitor] ✓ New best! Config 1807/9557: 0.028 ms (Progress: 313/9557)
+[Monitor] Progress: 363/9557 (Valid: 363, Failed: 0, Best: 0.028 ms, No improvement: 50/5000)
+[Monitor] Progress: 413/9557 (Valid: 413, Failed: 0, Best: 0.028 ms, No improvement: 100/5000)
+[Monitor] Progress: 463/9557 (Valid: 463, Failed: 0, Best: 0.028 ms, No improvement: 150/5000)
+[Monitor] Progress: 513/9557 (Valid: 513, Failed: 0, Best: 0.028 ms, No improvement: 200/5000)
+[Monitor] Progress: 563/9557 (Valid: 563, Failed: 0, Best: 0.028 ms, No improvement: 250/5000)
+[Monitor] Progress: 613/9557 (Valid: 613, Failed: 0, Best: 0.028 ms, No improvement: 300/5000)
+[Monitor] Progress: 663/9557 (Valid: 663, Failed: 0, Best: 0.028 ms, No improvement: 350/5000)
+[Monitor] Progress: 713/9557 (Valid: 713, Failed: 0, Best: 0.028 ms, No improvement: 400/5000)
+[Monitor] Progress: 763/9557 (Valid: 763, Failed: 0, Best: 0.028 ms, No improvement: 450/5000)
+[Monitor] Progress: 813/9557 (Valid: 813, Failed: 0, Best: 0.028 ms, No improvement: 500/5000)
+[Monitor] Progress: 863/9557 (Valid: 863, Failed: 0, Best: 0.028 ms, No improvement: 550/5000)
+[Monitor] Progress: 913/9557 (Valid: 913, Failed: 0, Best: 0.028 ms, No improvement: 600/5000)
+[Monitor] ✓ New best! Config 2313/9557: 0.026 ms (Progress: 955/9557)
+[Monitor] Progress: 1005/9557 (Valid: 1005, Failed: 0, Best: 0.026 ms, No improvement: 50/5000)
+[Monitor] Progress: 1055/9557 (Valid: 1055, Failed: 0, Best: 0.026 ms, No improvement: 100/5000)
+[Monitor] Progress: 1105/9557 (Valid: 1105, Failed: 0, Best: 0.026 ms, No improvement: 150/5000)
+[Monitor] Progress: 1155/9557 (Valid: 1155, Failed: 0, Best: 0.026 ms, No improvement: 200/5000)
+[Monitor] Progress: 1205/9557 (Valid: 1205, Failed: 0, Best: 0.026 ms, No improvement: 250/5000)
+[Monitor] Progress: 1255/9557 (Valid: 1255, Failed: 0, Best: 0.026 ms, No improvement: 300/5000)
+[Monitor] Progress: 1305/9557 (Valid: 1305, Failed: 0, Best: 0.026 ms, No improvement: 350/5000)
+[Monitor] Progress: 1355/9557 (Valid: 1355, Failed: 0, Best: 0.026 ms, No improvement: 400/5000)
+[Monitor] Progress: 1405/9557 (Valid: 1405, Failed: 0, Best: 0.026 ms, No improvement: 450/5000)
+[Monitor] ✓ New best! Config 110/9557: 0.025 ms (Progress: 1432/9557)
+[Monitor] Progress: 1482/9557 (Valid: 1482, Failed: 0, Best: 0.025 ms, No improvement: 50/5000)
+[Monitor] Progress: 1532/9557 (Valid: 1532, Failed: 0, Best: 0.025 ms, No improvement: 100/5000)
+[Monitor] Progress: 1582/9557 (Valid: 1582, Failed: 0, Best: 0.025 ms, No improvement: 150/5000)
+[Monitor] Progress: 1632/9557 (Valid: 1632, Failed: 0, Best: 0.025 ms, No improvement: 200/5000)
+[Monitor] Progress: 1682/9557 (Valid: 1682, Failed: 0, Best: 0.025 ms, No improvement: 250/5000)
+[Monitor] ✓ New best! Config 109/9557: 0.024 ms (Progress: 1698/9557)
+[Monitor] Progress: 1748/9557 (Valid: 1748, Failed: 0, Best: 0.024 ms, No improvement: 50/5000)
+[Monitor] Progress: 1798/9557 (Valid: 1798, Failed: 0, Best: 0.024 ms, No improvement: 100/5000)
+[Monitor] ✓ New best! Config 114/9557: 0.023 ms (Progress: 1841/9557)
+[Monitor] Progress: 1891/9557 (Valid: 1891, Failed: 0, Best: 0.023 ms, No improvement: 50/5000)
+[Monitor] Progress: 1941/9557 (Valid: 1941, Failed: 0, Best: 0.023 ms, No improvement: 100/5000)
+[Monitor] Progress: 1991/9557 (Valid: 1991, Failed: 0, Best: 0.023 ms, No improvement: 150/5000)
+[Monitor] Progress: 2041/9557 (Valid: 2041, Failed: 0, Best: 0.023 ms, No improvement: 200/5000)
+[Monitor] Progress: 2091/9557 (Valid: 2091, Failed: 0, Best: 0.023 ms, No improvement: 250/5000)
+[Monitor] Progress: 2141/9557 (Valid: 2141, Failed: 0, Best: 0.023 ms, No improvement: 300/5000)
+[Monitor] Progress: 2191/9557 (Valid: 2191, Failed: 0, Best: 0.023 ms, No improvement: 350/5000)
+[Monitor] ✓ New best! Config 112/9557: 0.022 ms (Progress: 2223/9557)
+[Monitor] Progress: 2273/9557 (Valid: 2273, Failed: 0, Best: 0.022 ms, No improvement: 50/5000)
+[Monitor] Progress: 2323/9557 (Valid: 2323, Failed: 0, Best: 0.022 ms, No improvement: 100/5000)
+[Monitor] Progress: 2373/9557 (Valid: 2373, Failed: 0, Best: 0.022 ms, No improvement: 150/5000)
+[Monitor] Progress: 2423/9557 (Valid: 2423, Failed: 0, Best: 0.022 ms, No improvement: 200/5000)
+[Monitor] Progress: 2473/9557 (Valid: 2473, Failed: 0, Best: 0.022 ms, No improvement: 250/5000)
+[Monitor] Progress: 2523/9557 (Valid: 2523, Failed: 0, Best: 0.022 ms, No improvement: 300/5000)
+[Monitor] Progress: 2573/9557 (Valid: 2573, Failed: 0, Best: 0.022 ms, No improvement: 350/5000)
+[Monitor] Progress: 2623/9557 (Valid: 2623, Failed: 0, Best: 0.022 ms, No improvement: 400/5000)
+[Monitor] Progress: 2673/9557 (Valid: 2673, Failed: 0, Best: 0.022 ms, No improvement: 450/5000)
+[Monitor] Progress: 2723/9557 (Valid: 2723, Failed: 0, Best: 0.022 ms, No improvement: 500/5000)
+[Monitor] Progress: 2773/9557 (Valid: 2773, Failed: 0, Best: 0.022 ms, No improvement: 550/5000)
+[Monitor] Progress: 2823/9557 (Valid: 2823, Failed: 0, Best: 0.022 ms, No improvement: 600/5000)
+[Monitor] Progress: 2873/9557 (Valid: 2873, Failed: 0, Best: 0.022 ms, No improvement: 650/5000)
+[Monitor] Progress: 2923/9557 (Valid: 2923, Failed: 0, Best: 0.022 ms, No improvement: 700/5000)
+[Monitor] Progress: 2973/9557 (Valid: 2973, Failed: 0, Best: 0.022 ms, No improvement: 750/5000)
+[Monitor] Progress: 3023/9557 (Valid: 3023, Failed: 0, Best: 0.022 ms, No improvement: 800/5000)
+[Monitor] Progress: 3073/9557 (Valid: 3073, Failed: 0, Best: 0.022 ms, No improvement: 850/5000)
+[Monitor] Progress: 3123/9557 (Valid: 3123, Failed: 0, Best: 0.022 ms, No improvement: 900/5000)
+[Monitor] Progress: 3173/9557 (Valid: 3173, Failed: 0, Best: 0.022 ms, No improvement: 950/5000)
+[Monitor] Progress: 3223/9557 (Valid: 3223, Failed: 0, Best: 0.022 ms, No improvement: 1000/5000)
+[Monitor] Progress: 3273/9557 (Valid: 3273, Failed: 0, Best: 0.022 ms, No improvement: 1050/5000)
+[Monitor] Progress: 3323/9557 (Valid: 3323, Failed: 0, Best: 0.022 ms, No improvement: 1100/5000)
+[Monitor] Progress: 3373/9557 (Valid: 3373, Failed: 0, Best: 0.022 ms, No improvement: 1150/5000)
+[Monitor] Progress: 3423/9557 (Valid: 3423, Failed: 0, Best: 0.022 ms, No improvement: 1200/5000)
+[Monitor] Progress: 3473/9557 (Valid: 3473, Failed: 0, Best: 0.022 ms, No improvement: 1250/5000)
+[Monitor] Progress: 3523/9557 (Valid: 3523, Failed: 0, Best: 0.022 ms, No improvement: 1300/5000)
+[Monitor] Progress: 3573/9557 (Valid: 3573, Failed: 0, Best: 0.022 ms, No improvement: 1350/5000)
+[Monitor] Progress: 3623/9557 (Valid: 3623, Failed: 0, Best: 0.022 ms, No improvement: 1400/5000)
+[Monitor] Progress: 3673/9557 (Valid: 3673, Failed: 0, Best: 0.022 ms, No improvement: 1450/5000)
+[Monitor] Progress: 3723/9557 (Valid: 3723, Failed: 0, Best: 0.022 ms, No improvement: 1500/5000)
+[Monitor] Progress: 3773/9557 (Valid: 3773, Failed: 0, Best: 0.022 ms, No improvement: 1550/5000)
+[Monitor] Progress: 3823/9557 (Valid: 3823, Failed: 0, Best: 0.022 ms, No improvement: 1600/5000)
+[Monitor] Progress: 3873/9557 (Valid: 3873, Failed: 0, Best: 0.022 ms, No improvement: 1650/5000)
+[Monitor] Progress: 3923/9557 (Valid: 3923, Failed: 0, Best: 0.022 ms, No improvement: 1700/5000)
+[Monitor] Progress: 3973/9557 (Valid: 3973, Failed: 0, Best: 0.022 ms, No improvement: 1750/5000)
+[Monitor] Progress: 4023/9557 (Valid: 4023, Failed: 0, Best: 0.022 ms, No improvement: 1800/5000)
+[Monitor] Progress: 4073/9557 (Valid: 4073, Failed: 0, Best: 0.022 ms, No improvement: 1850/5000)
+[Monitor] Progress: 4123/9557 (Valid: 4123, Failed: 0, Best: 0.022 ms, No improvement: 1900/5000)
+[Monitor] Progress: 4173/9557 (Valid: 4173, Failed: 0, Best: 0.022 ms, No improvement: 1950/5000)
+[Monitor] Progress: 4223/9557 (Valid: 4223, Failed: 0, Best: 0.022 ms, No improvement: 2000/5000)
+[Monitor] Progress: 4273/9557 (Valid: 4273, Failed: 0, Best: 0.022 ms, No improvement: 2050/5000)
+[Monitor] Progress: 4323/9557 (Valid: 4323, Failed: 0, Best: 0.022 ms, No improvement: 2100/5000)
+[Monitor] Progress: 4373/9557 (Valid: 4373, Failed: 0, Best: 0.022 ms, No improvement: 2150/5000)
+[Monitor] Progress: 4423/9557 (Valid: 4423, Failed: 0, Best: 0.022 ms, No improvement: 2200/5000)
+[Monitor] Progress: 4473/9557 (Valid: 4473, Failed: 0, Best: 0.022 ms, No improvement: 2250/5000)
+[Monitor] Progress: 4523/9557 (Valid: 4523, Failed: 0, Best: 0.022 ms, No improvement: 2300/5000)
+[Monitor] Progress: 4573/9557 (Valid: 4573, Failed: 0, Best: 0.022 ms, No improvement: 2350/5000)
+[Monitor] Progress: 4623/9557 (Valid: 4623, Failed: 0, Best: 0.022 ms, No improvement: 2400/5000)
+[Monitor] Progress: 4673/9557 (Valid: 4673, Failed: 0, Best: 0.022 ms, No improvement: 2450/5000)
+[Monitor] Progress: 4723/9557 (Valid: 4723, Failed: 0, Best: 0.022 ms, No improvement: 2500/5000)
+[Monitor] Progress: 4773/9557 (Valid: 4773, Failed: 0, Best: 0.022 ms, No improvement: 2550/5000)
+[Monitor] Progress: 4823/9557 (Valid: 4823, Failed: 0, Best: 0.022 ms, No improvement: 2600/5000)
+[Monitor] Progress: 4873/9557 (Valid: 4873, Failed: 0, Best: 0.022 ms, No improvement: 2650/5000)
+[Monitor] Progress: 4923/9557 (Valid: 4923, Failed: 0, Best: 0.022 ms, No improvement: 2700/5000)
+[Monitor] Progress: 4973/9557 (Valid: 4973, Failed: 0, Best: 0.022 ms, No improvement: 2750/5000)
+[Monitor] Progress: 5023/9557 (Valid: 5023, Failed: 0, Best: 0.022 ms, No improvement: 2800/5000)
+[Monitor] Progress: 5073/9557 (Valid: 5073, Failed: 0, Best: 0.022 ms, No improvement: 2850/5000)
+[Monitor] Progress: 5123/9557 (Valid: 5123, Failed: 0, Best: 0.022 ms, No improvement: 2900/5000)
+[Monitor] Progress: 5173/9557 (Valid: 5173, Failed: 0, Best: 0.022 ms, No improvement: 2950/5000)
+[Monitor] Progress: 5223/9557 (Valid: 5223, Failed: 0, Best: 0.022 ms, No improvement: 3000/5000)
+[Monitor] Progress: 5273/9557 (Valid: 5273, Failed: 0, Best: 0.022 ms, No improvement: 3050/5000)
+[Monitor] Progress: 5323/9557 (Valid: 5323, Failed: 0, Best: 0.022 ms, No improvement: 3100/5000)
+[Monitor] Progress: 5373/9557 (Valid: 5373, Failed: 0, Best: 0.022 ms, No improvement: 3150/5000)
+[Monitor] Progress: 5423/9557 (Valid: 5423, Failed: 0, Best: 0.022 ms, No improvement: 3200/5000)
+[Monitor] Progress: 5473/9557 (Valid: 5473, Failed: 0, Best: 0.022 ms, No improvement: 3250/5000)
+[Monitor] Progress: 5523/9557 (Valid: 5523, Failed: 0, Best: 0.022 ms, No improvement: 3300/5000)
+[Monitor] Progress: 5573/9557 (Valid: 5573, Failed: 0, Best: 0.022 ms, No improvement: 3350/5000)
+[Monitor] Progress: 5623/9557 (Valid: 5623, Failed: 0, Best: 0.022 ms, No improvement: 3400/5000)
+[Monitor] Progress: 5673/9557 (Valid: 5673, Failed: 0, Best: 0.022 ms, No improvement: 3450/5000)
+[Monitor] Progress: 5723/9557 (Valid: 5723, Failed: 0, Best: 0.022 ms, No improvement: 3500/5000)
+[Monitor] Progress: 5773/9557 (Valid: 5773, Failed: 0, Best: 0.022 ms, No improvement: 3550/5000)
+[Monitor] Progress: 5823/9557 (Valid: 5823, Failed: 0, Best: 0.022 ms, No improvement: 3600/5000)
+[Monitor] Progress: 5873/9557 (Valid: 5873, Failed: 0, Best: 0.022 ms, No improvement: 3650/5000)
+[Monitor] Progress: 5923/9557 (Valid: 5923, Failed: 0, Best: 0.022 ms, No improvement: 3700/5000)
+[Monitor] Progress: 5973/9557 (Valid: 5973, Failed: 0, Best: 0.022 ms, No improvement: 3750/5000)
+[Monitor] Progress: 6023/9557 (Valid: 6023, Failed: 0, Best: 0.022 ms, No improvement: 3800/5000)
+[Monitor] Progress: 6073/9557 (Valid: 6073, Failed: 0, Best: 0.022 ms, No improvement: 3850/5000)
+[Monitor] Progress: 6123/9557 (Valid: 6123, Failed: 0, Best: 0.022 ms, No improvement: 3900/5000)
+[Monitor] Progress: 6173/9557 (Valid: 6173, Failed: 0, Best: 0.022 ms, No improvement: 3950/5000)
+[Monitor] Progress: 6223/9557 (Valid: 6223, Failed: 0, Best: 0.022 ms, No improvement: 4000/5000)
+[Monitor] Progress: 6273/9557 (Valid: 6273, Failed: 0, Best: 0.022 ms, No improvement: 4050/5000)
+[Monitor] Progress: 6323/9557 (Valid: 6323, Failed: 0, Best: 0.022 ms, No improvement: 4100/5000)
+[Monitor] Progress: 6373/9557 (Valid: 6373, Failed: 0, Best: 0.022 ms, No improvement: 4150/5000)
+[Monitor] Progress: 6423/9557 (Valid: 6423, Failed: 0, Best: 0.022 ms, No improvement: 4200/5000)
+[Monitor] Progress: 6473/9557 (Valid: 6473, Failed: 0, Best: 0.022 ms, No improvement: 4250/5000)
+[Monitor] Progress: 6523/9557 (Valid: 6523, Failed: 0, Best: 0.022 ms, No improvement: 4300/5000)
+[Monitor] Progress: 6573/9557 (Valid: 6573, Failed: 0, Best: 0.022 ms, No improvement: 4350/5000)
+[Monitor] Progress: 6623/9557 (Valid: 6623, Failed: 0, Best: 0.022 ms, No improvement: 4400/5000)
+[Monitor] Progress: 6673/9557 (Valid: 6673, Failed: 0, Best: 0.022 ms, No improvement: 4450/5000)
+[Monitor] Progress: 6723/9557 (Valid: 6723, Failed: 0, Best: 0.022 ms, No improvement: 4500/5000)
+[Monitor] Progress: 6773/9557 (Valid: 6773, Failed: 0, Best: 0.022 ms, No improvement: 4550/5000)
+[Monitor] Progress: 6823/9557 (Valid: 6823, Failed: 0, Best: 0.022 ms, No improvement: 4600/5000)
+[Monitor] Progress: 6873/9557 (Valid: 6873, Failed: 0, Best: 0.022 ms, No improvement: 4650/5000)
+[Monitor] Progress: 6923/9557 (Valid: 6923, Failed: 0, Best: 0.022 ms, No improvement: 4700/5000)
+[Monitor] Progress: 6973/9557 (Valid: 6973, Failed: 0, Best: 0.022 ms, No improvement: 4750/5000)
+[Monitor] Progress: 7023/9557 (Valid: 7023, Failed: 0, Best: 0.022 ms, No improvement: 4800/5000)
+[Monitor] Progress: 7073/9557 (Valid: 7073, Failed: 0, Best: 0.022 ms, No improvement: 4850/5000)
+[Monitor] Progress: 7123/9557 (Valid: 7123, Failed: 0, Best: 0.022 ms, No improvement: 4900/5000)
+[Monitor] Progress: 7173/9557 (Valid: 7173, Failed: 0, Best: 0.022 ms, No improvement: 4950/5000)
+
+[Monitor] ⚠️  Early stopping: No improvement for 5000 configs
+[Monitor] Best config found: 0.022 ms at index 112
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=2048, n=4, C=512, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 7223/9557
+[Monitor] Valid results: 7223
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.022 ms
+[Monitor] Best config index: 112
+[Monitor] Best config: {'BLOCK_M': 32, 'BLOCK_N': 16, 'BLOCK_K': 256, 'NUM_KSPLIT': 1, 'num_warps': 4, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': False}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_8192_n4_C512_20260430_144925.json
+[Monitor] ================================================================================
+
+[Worker GPU 6] Received stop signal, terminating...
+[Worker GPU 4] Received stop signal, terminating...
+[Worker GPU 7] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Main] Completed tuning for fused_mhc: M=2048, n=4, C=512, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=8192, n=4, C=512, sinkhorn_iters=20
+================================================================================
+[Main] Found 324 previously tested configs, will skip them
+[Main] Testing 9468/9792 configs (skipping 324 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=8192, n=4, C=512, sinkhorn_iters=20
+[Monitor] Waiting for 9468 benchmark results...
+[Monitor] Will stop early if no improvement after 5000 configs
+[Monitor] ✓ New best! Config 5195/9468: 0.083 ms (Progress: 1/9468)
+[Monitor] ✓ New best! Config 5518/9468: 0.068 ms (Progress: 2/9468)
+[Monitor] ✓ New best! Config 1523/9468: 0.056 ms (Progress: 4/9468)
+[Monitor] ✓ New best! Config 2540/9468: 0.043 ms (Progress: 5/9468)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 6884/9468: 0.042 ms (Progress: 6/9468)
+[Monitor] ✓ New best! Config 1929/9468: 0.040 ms (Progress: 9/9468)
+[Monitor] ✓ New best! Config 4376/9468: 0.039 ms (Progress: 12/9468)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 4840/9468: 0.039 ms (Progress: 39/9468)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 267/9468: 0.035 ms (Progress: 68/9468)
+[Monitor] ✓ New best! Config 403/9468: 0.035 ms (Progress: 116/9468)
+[Monitor] Progress: 166/9468 (Valid: 166, Failed: 0, Best: 0.035 ms, No improvement: 50/5000)
+[Monitor] Progress: 216/9468 (Valid: 216, Failed: 0, Best: 0.035 ms, No improvement: 100/5000)
+[Monitor] Progress: 266/9468 (Valid: 266, Failed: 0, Best: 0.035 ms, No improvement: 150/5000)
+[Monitor] Progress: 316/9468 (Valid: 316, Failed: 0, Best: 0.035 ms, No improvement: 200/5000)
+[Monitor] Progress: 366/9468 (Valid: 366, Failed: 0, Best: 0.035 ms, No improvement: 250/5000)
+[Monitor] Progress: 416/9468 (Valid: 416, Failed: 0, Best: 0.035 ms, No improvement: 300/5000)
+[Monitor] Progress: 466/9468 (Valid: 466, Failed: 0, Best: 0.035 ms, No improvement: 350/5000)
+[Monitor] ✓ New best! Config 67/9468: 0.031 ms (Progress: 499/9468)
+[Monitor] Progress: 549/9468 (Valid: 549, Failed: 0, Best: 0.031 ms, No improvement: 50/5000)
+[Monitor] Progress: 599/9468 (Valid: 599, Failed: 0, Best: 0.031 ms, No improvement: 100/5000)
+[Monitor] Progress: 649/9468 (Valid: 649, Failed: 0, Best: 0.031 ms, No improvement: 150/5000)
+[Monitor] Progress: 699/9468 (Valid: 699, Failed: 0, Best: 0.031 ms, No improvement: 200/5000)
+[Monitor] Progress: 749/9468 (Valid: 749, Failed: 0, Best: 0.031 ms, No improvement: 250/5000)
+[Monitor] Progress: 799/9468 (Valid: 799, Failed: 0, Best: 0.031 ms, No improvement: 300/5000)
+[Monitor] Progress: 849/9468 (Valid: 849, Failed: 0, Best: 0.031 ms, No improvement: 350/5000)
+[Monitor] Progress: 899/9468 (Valid: 899, Failed: 0, Best: 0.031 ms, No improvement: 400/5000)
+[Monitor] Progress: 949/9468 (Valid: 949, Failed: 0, Best: 0.031 ms, No improvement: 450/5000)
+[Monitor] Progress: 999/9468 (Valid: 999, Failed: 0, Best: 0.031 ms, No improvement: 500/5000)
+[Monitor] Progress: 1049/9468 (Valid: 1049, Failed: 0, Best: 0.031 ms, No improvement: 550/5000)
+[Monitor] Progress: 1099/9468 (Valid: 1099, Failed: 0, Best: 0.031 ms, No improvement: 600/5000)
+[Monitor] Progress: 1149/9468 (Valid: 1149, Failed: 0, Best: 0.031 ms, No improvement: 650/5000)
+[Monitor] Progress: 1199/9468 (Valid: 1199, Failed: 0, Best: 0.031 ms, No improvement: 700/5000)
+[Monitor] Progress: 1249/9468 (Valid: 1249, Failed: 0, Best: 0.031 ms, No improvement: 750/5000)
+[Monitor] Progress: 1299/9468 (Valid: 1299, Failed: 0, Best: 0.031 ms, No improvement: 800/5000)
+[Monitor] Progress: 1349/9468 (Valid: 1349, Failed: 0, Best: 0.031 ms, No improvement: 850/5000)
+[Monitor] Progress: 1399/9468 (Valid: 1399, Failed: 0, Best: 0.031 ms, No improvement: 900/5000)
+[Monitor] Progress: 1449/9468 (Valid: 1449, Failed: 0, Best: 0.031 ms, No improvement: 950/5000)
+[Monitor] Progress: 1499/9468 (Valid: 1499, Failed: 0, Best: 0.031 ms, No improvement: 1000/5000)
+[Monitor] Progress: 1549/9468 (Valid: 1549, Failed: 0, Best: 0.031 ms, No improvement: 1050/5000)
+[Monitor] Progress: 1599/9468 (Valid: 1599, Failed: 0, Best: 0.031 ms, No improvement: 1100/5000)
+[Monitor] Progress: 1649/9468 (Valid: 1649, Failed: 0, Best: 0.031 ms, No improvement: 1150/5000)
+[Monitor] Progress: 1699/9468 (Valid: 1699, Failed: 0, Best: 0.031 ms, No improvement: 1200/5000)
+[Monitor] Progress: 1749/9468 (Valid: 1749, Failed: 0, Best: 0.031 ms, No improvement: 1250/5000)
+[Monitor] Progress: 1799/9468 (Valid: 1799, Failed: 0, Best: 0.031 ms, No improvement: 1300/5000)
+[Monitor] Progress: 1849/9468 (Valid: 1849, Failed: 0, Best: 0.031 ms, No improvement: 1350/5000)
+[Monitor] Progress: 1899/9468 (Valid: 1899, Failed: 0, Best: 0.031 ms, No improvement: 1400/5000)
+[Monitor] Progress: 1949/9468 (Valid: 1949, Failed: 0, Best: 0.031 ms, No improvement: 1450/5000)
+[Monitor] Progress: 1999/9468 (Valid: 1999, Failed: 0, Best: 0.031 ms, No improvement: 1500/5000)
+[Monitor] Progress: 2049/9468 (Valid: 2049, Failed: 0, Best: 0.031 ms, No improvement: 1550/5000)
+[Monitor] Progress: 2099/9468 (Valid: 2099, Failed: 0, Best: 0.031 ms, No improvement: 1600/5000)
+[Monitor] ✓ New best! Config 85/9468: 0.028 ms (Progress: 2136/9468)
+[Monitor] Progress: 2186/9468 (Valid: 2186, Failed: 0, Best: 0.028 ms, No improvement: 50/5000)
+[Monitor] Progress: 2236/9468 (Valid: 2236, Failed: 0, Best: 0.028 ms, No improvement: 100/5000)
+[Monitor] Progress: 2286/9468 (Valid: 2286, Failed: 0, Best: 0.028 ms, No improvement: 150/5000)
+[Monitor] Progress: 2336/9468 (Valid: 2336, Failed: 0, Best: 0.028 ms, No improvement: 200/5000)
+[Monitor] Progress: 2386/9468 (Valid: 2386, Failed: 0, Best: 0.028 ms, No improvement: 250/5000)
+[Monitor] Progress: 2436/9468 (Valid: 2436, Failed: 0, Best: 0.028 ms, No improvement: 300/5000)
+[Monitor] Progress: 2486/9468 (Valid: 2486, Failed: 0, Best: 0.028 ms, No improvement: 350/5000)
+[Monitor] Progress: 2536/9468 (Valid: 2536, Failed: 0, Best: 0.028 ms, No improvement: 400/5000)
+[Monitor] Progress: 2586/9468 (Valid: 2586, Failed: 0, Best: 0.028 ms, No improvement: 450/5000)
+[Monitor] Progress: 2636/9468 (Valid: 2636, Failed: 0, Best: 0.028 ms, No improvement: 500/5000)
+[Monitor] Progress: 2686/9468 (Valid: 2686, Failed: 0, Best: 0.028 ms, No improvement: 550/5000)
+[Monitor] Progress: 2736/9468 (Valid: 2736, Failed: 0, Best: 0.028 ms, No improvement: 600/5000)
+[Monitor] Progress: 2786/9468 (Valid: 2786, Failed: 0, Best: 0.028 ms, No improvement: 650/5000)
+[Monitor] Progress: 2836/9468 (Valid: 2836, Failed: 0, Best: 0.028 ms, No improvement: 700/5000)
+[Monitor] Progress: 2886/9468 (Valid: 2886, Failed: 0, Best: 0.028 ms, No improvement: 750/5000)
+[Monitor] Progress: 2936/9468 (Valid: 2936, Failed: 0, Best: 0.028 ms, No improvement: 800/5000)
+[Monitor] Progress: 2986/9468 (Valid: 2986, Failed: 0, Best: 0.028 ms, No improvement: 850/5000)
+[Monitor] Progress: 3036/9468 (Valid: 3036, Failed: 0, Best: 0.028 ms, No improvement: 900/5000)
+[Monitor] Progress: 3086/9468 (Valid: 3086, Failed: 0, Best: 0.028 ms, No improvement: 950/5000)
+[Monitor] Progress: 3136/9468 (Valid: 3136, Failed: 0, Best: 0.028 ms, No improvement: 1000/5000)
+[Monitor] Progress: 3186/9468 (Valid: 3186, Failed: 0, Best: 0.028 ms, No improvement: 1050/5000)
+[Monitor] Progress: 3236/9468 (Valid: 3236, Failed: 0, Best: 0.028 ms, No improvement: 1100/5000)
+[Monitor] Progress: 3286/9468 (Valid: 3286, Failed: 0, Best: 0.028 ms, No improvement: 1150/5000)
+[Monitor] Progress: 3336/9468 (Valid: 3336, Failed: 0, Best: 0.028 ms, No improvement: 1200/5000)
+[Monitor] Progress: 3386/9468 (Valid: 3386, Failed: 0, Best: 0.028 ms, No improvement: 1250/5000)
+[Monitor] Progress: 3436/9468 (Valid: 3436, Failed: 0, Best: 0.028 ms, No improvement: 1300/5000)
+[Monitor] Progress: 3486/9468 (Valid: 3486, Failed: 0, Best: 0.028 ms, No improvement: 1350/5000)
+[Monitor] Progress: 3536/9468 (Valid: 3536, Failed: 0, Best: 0.028 ms, No improvement: 1400/5000)
+[Monitor] Progress: 3586/9468 (Valid: 3586, Failed: 0, Best: 0.028 ms, No improvement: 1450/5000)
+[Monitor] Progress: 3636/9468 (Valid: 3636, Failed: 0, Best: 0.028 ms, No improvement: 1500/5000)
+[Monitor] Progress: 3686/9468 (Valid: 3686, Failed: 0, Best: 0.028 ms, No improvement: 1550/5000)
+[Monitor] Progress: 3736/9468 (Valid: 3736, Failed: 0, Best: 0.028 ms, No improvement: 1600/5000)
+[Monitor] Progress: 3786/9468 (Valid: 3786, Failed: 0, Best: 0.028 ms, No improvement: 1650/5000)
+[Monitor] Progress: 3836/9468 (Valid: 3836, Failed: 0, Best: 0.028 ms, No improvement: 1700/5000)
+[Monitor] Progress: 3886/9468 (Valid: 3886, Failed: 0, Best: 0.028 ms, No improvement: 1750/5000)
+[Monitor] Progress: 3936/9468 (Valid: 3936, Failed: 0, Best: 0.028 ms, No improvement: 1800/5000)
+[Monitor] Progress: 3986/9468 (Valid: 3986, Failed: 0, Best: 0.028 ms, No improvement: 1850/5000)
+[Monitor] Progress: 4036/9468 (Valid: 4036, Failed: 0, Best: 0.028 ms, No improvement: 1900/5000)
+[Monitor] Progress: 4086/9468 (Valid: 4086, Failed: 0, Best: 0.028 ms, No improvement: 1950/5000)
+[Monitor] Progress: 4136/9468 (Valid: 4136, Failed: 0, Best: 0.028 ms, No improvement: 2000/5000)
+[Monitor] Progress: 4186/9468 (Valid: 4186, Failed: 0, Best: 0.028 ms, No improvement: 2050/5000)
+[Monitor] Progress: 4236/9468 (Valid: 4236, Failed: 0, Best: 0.028 ms, No improvement: 2100/5000)
+[Monitor] Progress: 4286/9468 (Valid: 4286, Failed: 0, Best: 0.028 ms, No improvement: 2150/5000)
+[Monitor] Progress: 4336/9468 (Valid: 4336, Failed: 0, Best: 0.028 ms, No improvement: 2200/5000)
+[Monitor] Progress: 4386/9468 (Valid: 4386, Failed: 0, Best: 0.028 ms, No improvement: 2250/5000)
+[Monitor] Progress: 4436/9468 (Valid: 4436, Failed: 0, Best: 0.028 ms, No improvement: 2300/5000)
+[Monitor] Progress: 4486/9468 (Valid: 4486, Failed: 0, Best: 0.028 ms, No improvement: 2350/5000)
+[Monitor] Progress: 4536/9468 (Valid: 4536, Failed: 0, Best: 0.028 ms, No improvement: 2400/5000)
+[Monitor] Progress: 4586/9468 (Valid: 4586, Failed: 0, Best: 0.028 ms, No improvement: 2450/5000)
+[Monitor] Progress: 4636/9468 (Valid: 4636, Failed: 0, Best: 0.028 ms, No improvement: 2500/5000)
+[Monitor] Progress: 4686/9468 (Valid: 4686, Failed: 0, Best: 0.028 ms, No improvement: 2550/5000)
+[Monitor] Progress: 4736/9468 (Valid: 4736, Failed: 0, Best: 0.028 ms, No improvement: 2600/5000)
+[Monitor] Progress: 4786/9468 (Valid: 4786, Failed: 0, Best: 0.028 ms, No improvement: 2650/5000)
+[Monitor] Progress: 4836/9468 (Valid: 4836, Failed: 0, Best: 0.028 ms, No improvement: 2700/5000)
+[Monitor] Progress: 4886/9468 (Valid: 4886, Failed: 0, Best: 0.028 ms, No improvement: 2750/5000)
+[Monitor] Progress: 4936/9468 (Valid: 4936, Failed: 0, Best: 0.028 ms, No improvement: 2800/5000)
+[Monitor] Progress: 4986/9468 (Valid: 4986, Failed: 0, Best: 0.028 ms, No improvement: 2850/5000)
+[Monitor] Progress: 5036/9468 (Valid: 5036, Failed: 0, Best: 0.028 ms, No improvement: 2900/5000)
+[Monitor] Progress: 5086/9468 (Valid: 5086, Failed: 0, Best: 0.028 ms, No improvement: 2950/5000)
+[Monitor] Progress: 5136/9468 (Valid: 5136, Failed: 0, Best: 0.028 ms, No improvement: 3000/5000)
+[Monitor] Progress: 5186/9468 (Valid: 5186, Failed: 0, Best: 0.028 ms, No improvement: 3050/5000)
+[Monitor] Progress: 5236/9468 (Valid: 5236, Failed: 0, Best: 0.028 ms, No improvement: 3100/5000)
+[Monitor] Progress: 5286/9468 (Valid: 5286, Failed: 0, Best: 0.028 ms, No improvement: 3150/5000)
+[Monitor] Progress: 5336/9468 (Valid: 5336, Failed: 0, Best: 0.028 ms, No improvement: 3200/5000)
+[Monitor] Progress: 5386/9468 (Valid: 5386, Failed: 0, Best: 0.028 ms, No improvement: 3250/5000)
+[Monitor] Progress: 5436/9468 (Valid: 5436, Failed: 0, Best: 0.028 ms, No improvement: 3300/5000)
+[Monitor] Progress: 5486/9468 (Valid: 5486, Failed: 0, Best: 0.028 ms, No improvement: 3350/5000)
+[Monitor] Progress: 5536/9468 (Valid: 5536, Failed: 0, Best: 0.028 ms, No improvement: 3400/5000)
+[Monitor] Progress: 5586/9468 (Valid: 5586, Failed: 0, Best: 0.028 ms, No improvement: 3450/5000)
+[Monitor] Progress: 5636/9468 (Valid: 5636, Failed: 0, Best: 0.028 ms, No improvement: 3500/5000)
+[Monitor] Progress: 5686/9468 (Valid: 5686, Failed: 0, Best: 0.028 ms, No improvement: 3550/5000)
+[Monitor] Progress: 5736/9468 (Valid: 5736, Failed: 0, Best: 0.028 ms, No improvement: 3600/5000)
+[Monitor] Progress: 5786/9468 (Valid: 5786, Failed: 0, Best: 0.028 ms, No improvement: 3650/5000)
+[Monitor] Progress: 5836/9468 (Valid: 5836, Failed: 0, Best: 0.028 ms, No improvement: 3700/5000)
+[Monitor] Progress: 5886/9468 (Valid: 5886, Failed: 0, Best: 0.028 ms, No improvement: 3750/5000)
+[Monitor] Progress: 5936/9468 (Valid: 5936, Failed: 0, Best: 0.028 ms, No improvement: 3800/5000)
+[Monitor] Progress: 5986/9468 (Valid: 5986, Failed: 0, Best: 0.028 ms, No improvement: 3850/5000)
+[Monitor] Progress: 6036/9468 (Valid: 6036, Failed: 0, Best: 0.028 ms, No improvement: 3900/5000)
+[Monitor] Progress: 6086/9468 (Valid: 6086, Failed: 0, Best: 0.028 ms, No improvement: 3950/5000)
+[Monitor] Progress: 6136/9468 (Valid: 6136, Failed: 0, Best: 0.028 ms, No improvement: 4000/5000)
+[Monitor] Progress: 6186/9468 (Valid: 6186, Failed: 0, Best: 0.028 ms, No improvement: 4050/5000)
+[Monitor] Progress: 6236/9468 (Valid: 6236, Failed: 0, Best: 0.028 ms, No improvement: 4100/5000)
+[Monitor] Progress: 6286/9468 (Valid: 6286, Failed: 0, Best: 0.028 ms, No improvement: 4150/5000)
+[Monitor] Progress: 6336/9468 (Valid: 6336, Failed: 0, Best: 0.028 ms, No improvement: 4200/5000)
+[Monitor] Progress: 6386/9468 (Valid: 6386, Failed: 0, Best: 0.028 ms, No improvement: 4250/5000)
+[Monitor] Progress: 6436/9468 (Valid: 6436, Failed: 0, Best: 0.028 ms, No improvement: 4300/5000)
+[Monitor] Progress: 6486/9468 (Valid: 6486, Failed: 0, Best: 0.028 ms, No improvement: 4350/5000)
+[Monitor] Progress: 6536/9468 (Valid: 6536, Failed: 0, Best: 0.028 ms, No improvement: 4400/5000)
+[Monitor] Progress: 6586/9468 (Valid: 6586, Failed: 0, Best: 0.028 ms, No improvement: 4450/5000)
+[Monitor] Progress: 6636/9468 (Valid: 6636, Failed: 0, Best: 0.028 ms, No improvement: 4500/5000)
+[Monitor] Progress: 6686/9468 (Valid: 6686, Failed: 0, Best: 0.028 ms, No improvement: 4550/5000)
+[Monitor] Progress: 6736/9468 (Valid: 6736, Failed: 0, Best: 0.028 ms, No improvement: 4600/5000)
+[Monitor] Progress: 6786/9468 (Valid: 6786, Failed: 0, Best: 0.028 ms, No improvement: 4650/5000)
+[Monitor] Progress: 6836/9468 (Valid: 6836, Failed: 0, Best: 0.028 ms, No improvement: 4700/5000)
+[Monitor] Progress: 6886/9468 (Valid: 6886, Failed: 0, Best: 0.028 ms, No improvement: 4750/5000)
+[Monitor] Progress: 6936/9468 (Valid: 6936, Failed: 0, Best: 0.028 ms, No improvement: 4800/5000)
+[Monitor] Progress: 6986/9468 (Valid: 6986, Failed: 0, Best: 0.028 ms, No improvement: 4850/5000)
+[Monitor] Progress: 7036/9468 (Valid: 7036, Failed: 0, Best: 0.028 ms, No improvement: 4900/5000)
+[Monitor] Progress: 7086/9468 (Valid: 7086, Failed: 0, Best: 0.028 ms, No improvement: 4950/5000)
+
+[Monitor] ⚠️  Early stopping: No improvement for 5000 configs
+[Monitor] Best config found: 0.028 ms at index 85
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=8192, n=4, C=512, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 7136/9468
+[Monitor] Valid results: 7136
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.028 ms
+[Monitor] Best config index: 85
+[Monitor] Best config: {'BLOCK_M': 32, 'BLOCK_N': 16, 'BLOCK_K': 128, 'NUM_KSPLIT': 2, 'num_warps': 4, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': False}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_8192_n4_C512_20260430_144925.json
+[Monitor] ================================================================================
+
+[Worker GPU 6] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Worker GPU 4] Received stop signal, terminating...
+[Worker GPU 7] Received stop signal, terminating...
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 8 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

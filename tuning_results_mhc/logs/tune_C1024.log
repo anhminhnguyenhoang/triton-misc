@@ -1,0 +1,253 @@
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+Tuning kernel: fused_mhc
+M values: [1024, 2048, 4096, 8192, 16384]
+n: 4
+C values: [1024]
+Sinkhorn iterations: 20
+Data type: bf16
+Loaded tuning space from 'tuning_results/tuning_space_mhc.json'
+Total configurations to tune: 9792 (shuffled randomly)
+Using 4 worker(s) on GPU(s): [4, 5, 6, 7]
+
+################################################################################
+# TUNING C=1024
+################################################################################
+
+================================================================================
+Starting tuning for fused_mhc: M=1024, n=4, C=1024, sinkhorn_iters=20
+================================================================================
+[Main] Testing 9792/9792 configs (skipping 0 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=1024, n=4, C=1024, sinkhorn_iters=20
+[Monitor] Waiting for 9792 benchmark results...
+[Monitor] Will stop early if no improvement after 200 configs
+[Monitor] ✓ New best! Config 654/9792: 0.079 ms (Progress: 1/9792)
+[Monitor] ✓ New best! Config 1045/9792: 0.052 ms (Progress: 2/9792)
+[Monitor] ✓ New best! Config 5575/9792: 0.051 ms (Progress: 3/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 250/9792: 0.034 ms (Progress: 6/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] Progress: 56/9792 (Valid: 56, Failed: 0, Best: 0.034 ms, No improvement: 50/200)
+[Monitor] Progress: 106/9792 (Valid: 106, Failed: 0, Best: 0.034 ms, No improvement: 100/200)
+[Monitor] Progress: 156/9792 (Valid: 156, Failed: 0, Best: 0.034 ms, No improvement: 150/200)
+
+[Monitor] ⚠️  Early stopping: No improvement for 200 configs
+[Monitor] Best config found: 0.034 ms at index 250
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=1024, n=4, C=1024, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 206/9792
+[Monitor] Valid results: 206
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.034 ms
+[Monitor] Best config index: 250
+[Monitor] Best config: {'BLOCK_M': 64, 'BLOCK_N': 16, 'BLOCK_K': 128, 'NUM_KSPLIT': 8, 'num_warps': 8, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': False}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C1024_20260430_142614.json
+[Monitor] ================================================================================
+
+[Worker GPU 4] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Worker GPU 6] Received stop signal, terminating...
+[Worker GPU 7] Received stop signal, terminating...
+[Main] Completed tuning for fused_mhc: M=1024, n=4, C=1024, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=2048, n=4, C=1024, sinkhorn_iters=20
+================================================================================
+[Main] Testing 9792/9792 configs (skipping 0 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=2048, n=4, C=1024, sinkhorn_iters=20
+[Monitor] Waiting for 9792 benchmark results...
+[Monitor] Will stop early if no improvement after 200 configs
+[Monitor] ✓ New best! Config 654/9792: 0.080 ms (Progress: 1/9792)
+[Monitor] ✓ New best! Config 1045/9792: 0.046 ms (Progress: 2/9792)
+[Monitor] ✓ New best! Config 5575/9792: 0.046 ms (Progress: 3/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 250/9792: 0.030 ms (Progress: 6/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] Progress: 56/9792 (Valid: 56, Failed: 0, Best: 0.030 ms, No improvement: 50/200)
+[Monitor] Progress: 106/9792 (Valid: 106, Failed: 0, Best: 0.030 ms, No improvement: 100/200)
+[Monitor] Progress: 156/9792 (Valid: 156, Failed: 0, Best: 0.030 ms, No improvement: 150/200)
+
+[Monitor] ⚠️  Early stopping: No improvement for 200 configs
+[Monitor] Best config found: 0.030 ms at index 250
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=2048, n=4, C=1024, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 206/9792
+[Monitor] Valid results: 206
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.030 ms
+[Monitor] Best config index: 250
+[Monitor] Best config: {'BLOCK_M': 64, 'BLOCK_N': 16, 'BLOCK_K': 128, 'NUM_KSPLIT': 8, 'num_warps': 8, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': False}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C1024_20260430_142614.json
+[Monitor] ================================================================================
+
+[Worker GPU 7] Received stop signal, terminating...
+[Worker GPU 6] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Worker GPU 4] Received stop signal, terminating...
+[Main] Completed tuning for fused_mhc: M=2048, n=4, C=1024, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=4096, n=4, C=1024, sinkhorn_iters=20
+================================================================================
+[Main] Testing 9792/9792 configs (skipping 0 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=4096, n=4, C=1024, sinkhorn_iters=20
+[Monitor] Waiting for 9792 benchmark results...
+[Monitor] Will stop early if no improvement after 200 configs
+[Monitor] ✓ New best! Config 654/9792: 0.133 ms (Progress: 1/9792)
+[Monitor] ✓ New best! Config 1045/9792: 0.063 ms (Progress: 2/9792)
+[Monitor] ✓ New best! Config 5575/9792: 0.048 ms (Progress: 3/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 250/9792: 0.031 ms (Progress: 6/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] Progress: 56/9792 (Valid: 56, Failed: 0, Best: 0.031 ms, No improvement: 50/200)
+[Monitor] Progress: 106/9792 (Valid: 106, Failed: 0, Best: 0.031 ms, No improvement: 100/200)
+[Monitor] Progress: 156/9792 (Valid: 156, Failed: 0, Best: 0.031 ms, No improvement: 150/200)
+
+[Monitor] ⚠️  Early stopping: No improvement for 200 configs
+[Monitor] Best config found: 0.031 ms at index 250
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=4096, n=4, C=1024, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 206/9792
+[Monitor] Valid results: 206
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.031 ms
+[Monitor] Best config index: 250
+[Monitor] Best config: {'BLOCK_M': 64, 'BLOCK_N': 16, 'BLOCK_K': 128, 'NUM_KSPLIT': 8, 'num_warps': 8, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': False}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C1024_20260430_142614.json
+[Monitor] ================================================================================
+
+[Worker GPU 4] Received stop signal, terminating...
+[Worker GPU 7] Received stop signal, terminating...
+[Worker GPU 6] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Main] Completed tuning for fused_mhc: M=4096, n=4, C=1024, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=8192, n=4, C=1024, sinkhorn_iters=20
+================================================================================
+[Main] Testing 9792/9792 configs (skipping 0 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=8192, n=4, C=1024, sinkhorn_iters=20
+[Monitor] Waiting for 9792 benchmark results...
+[Monitor] Will stop early if no improvement after 200 configs
+[Monitor] ✓ New best! Config 654/9792: 0.210 ms (Progress: 1/9792)
+[Monitor] ✓ New best! Config 1045/9792: 0.110 ms (Progress: 2/9792)
+[Monitor] ✓ New best! Config 5575/9792: 0.061 ms (Progress: 3/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 250/9792: 0.051 ms (Progress: 6/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 4377/9792: 0.050 ms (Progress: 50/9792)
+[Monitor] Progress: 100/9792 (Valid: 100, Failed: 0, Best: 0.050 ms, No improvement: 50/200)
+[Monitor] Progress: 150/9792 (Valid: 150, Failed: 0, Best: 0.050 ms, No improvement: 100/200)
+[Monitor] Progress: 200/9792 (Valid: 200, Failed: 0, Best: 0.050 ms, No improvement: 150/200)
+
+[Monitor] ⚠️  Early stopping: No improvement for 200 configs
+[Monitor] Best config found: 0.050 ms at index 4377
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=8192, n=4, C=1024, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 250/9792
+[Monitor] Valid results: 250
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.050 ms
+[Monitor] Best config index: 4377
+[Monitor] Best config: {'BLOCK_M': 64, 'BLOCK_N': 16, 'BLOCK_K': 128, 'NUM_KSPLIT': 4, 'num_warps': 4, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': True, 'BLOCK_M_SPLITC': 64, 'BLOCK_C_SPLITC': 32}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C1024_20260430_142614.json
+[Monitor] ================================================================================
+
+[Worker GPU 4] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Worker GPU 6] Received stop signal, terminating...
+[Worker GPU 7] Received stop signal, terminating...
+[Main] Completed tuning for fused_mhc: M=8192, n=4, C=1024, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=16384, n=4, C=1024, sinkhorn_iters=20
+================================================================================
+[Main] Testing 9792/9792 configs (skipping 0 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=16384, n=4, C=1024, sinkhorn_iters=20
+[Monitor] Waiting for 9792 benchmark results...
+[Monitor] Will stop early if no improvement after 200 configs
+[Monitor] ✓ New best! Config 654/9792: 0.414 ms (Progress: 1/9792)
+[Monitor] ✓ New best! Config 1045/9792: 0.211 ms (Progress: 2/9792)
+[Monitor] ✓ New best! Config 5575/9792: 0.109 ms (Progress: 3/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 250/9792: 0.096 ms (Progress: 6/9792)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 4377/9792: 0.092 ms (Progress: 48/9792)
+[Monitor] Progress: 98/9792 (Valid: 98, Failed: 0, Best: 0.092 ms, No improvement: 50/200)
+[Monitor] ✓ New best! Config 391/9792: 0.085 ms (Progress: 100/9792)
+[Monitor] Progress: 150/9792 (Valid: 150, Failed: 0, Best: 0.085 ms, No improvement: 50/200)
+[Monitor] Progress: 200/9792 (Valid: 200, Failed: 0, Best: 0.085 ms, No improvement: 100/200)
+[Monitor] Progress: 250/9792 (Valid: 250, Failed: 0, Best: 0.085 ms, No improvement: 150/200)
+
+[Monitor] ⚠️  Early stopping: No improvement for 200 configs
+[Monitor] Best config found: 0.085 ms at index 391
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=16384, n=4, C=1024, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 300/9792
+[Monitor] Valid results: 300
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.085 ms
+[Monitor] Best config index: 391
+[Monitor] Best config: {'BLOCK_M': 128, 'BLOCK_N': 16, 'BLOCK_K': 128, 'NUM_KSPLIT': 8, 'num_warps': 4, 'num_stages': 1, 'waves_per_eu': 0, 'USE_REDUCE_SPLITC': False}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C1024_20260430_142614.json
+[Monitor] ================================================================================
+
+[Worker GPU 4] Received stop signal, terminating...
+[Worker GPU 5] Received stop signal, terminating...
+[Worker GPU 7] Received stop signal, terminating...
+[Worker GPU 6] Received stop signal, terminating...
+[Main] Completed tuning for fused_mhc: M=16384, n=4, C=1024, sinkhorn_iters=20
+
+
+--------------------------------------------------------------------------------
+COMPLETED C=1024
+  Time: 0:02:14.003170
+  M values tuned: 5
+  Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C1024_20260430_142614.json
+--------------------------------------------------------------------------------
+
+================================================================================
+TUNING COMPLETE
+  Kernel: fused_mhc
+  Sinkhorn iterations: 20
+  C values tuned: [1024]
+  Total time: 0:02:14.006875
+  M values per C: 5
+  Configs per M value: 9792
+  Total benchmarks: 48960
+  Output files:
+    - best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C1024_20260430_142614.json
+================================================================================

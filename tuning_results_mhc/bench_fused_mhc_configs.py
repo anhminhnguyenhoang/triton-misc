@@ -10,18 +10,17 @@ from aiter.ops.triton.utils.mhc_config_utils import get_mhc_config
 from op_tests.triton_tests.utils.mhc_ref import generate_mhc_inputs
 
 
-def bench_fused_mhc(M, n, C, dtype=torch.bfloat16, hres_mode="sinkhorn"):
-    mode = "mhc_lite" if hres_mode == "lite" else "mhc"
+def bench_fused_mhc(M, n, C, dtype=torch.bfloat16):
     x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val = generate_mhc_inputs(
-        M, n, C, dtype, mode=mode
+        M, n, C, dtype
     )
 
     # Warm up
-    _ = fused_mhc(x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val, hres_mode=hres_mode)
+    _ = fused_mhc(x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val)
     torch.cuda.synchronize()
 
     ms = triton.testing.do_bench(
-        lambda: fused_mhc(x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val, hres_mode=hres_mode),
+        lambda: fused_mhc(x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val),
         warmup=25,
         rep=100,
     )
@@ -30,7 +29,6 @@ def bench_fused_mhc(M, n, C, dtype=torch.bfloat16, hres_mode="sinkhorn"):
 
 def main():
     n = 4
-    hres_mode = "sinkhorn"
 
     # Clear LRU cache so config changes are picked up
     get_mhc_config.cache_clear()
@@ -42,7 +40,7 @@ def main():
 
     # Show configs being used
     for C in C_values:
-        cfg, specialized = get_mhc_config("MHC_FUSED", M_values[0], C, mode=hres_mode)
+        cfg, specialized = get_mhc_config("MHC_FUSED", M_values[0], C, mode="sinkhorn")
         print(f"C={C} (specialized={specialized}): {cfg}")
     print()
 
@@ -52,7 +50,7 @@ def main():
 
     for C in C_values:
         for M in M_values:
-            ms = bench_fused_mhc(M, n, C, hres_mode=hres_mode)
+            ms = bench_fused_mhc(M, n, C)
             key = f"C{C}_M{M}"
             results[key] = ms
             print(f"{C:>6} {M:>6} {ms:>10.4f}")

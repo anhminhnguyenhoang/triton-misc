@@ -5,8 +5,8 @@ This script performs systematic exploration of kernel configurations for fused_m
 and sinkhorn_knopp kernels using multi-GPU parallel workers.
 
 Usage:
-    python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --hres-mode lite --workers 0 1 2 3
-    python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --hres-mode sinkhorn --workers 0 1 2 3
+    python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --workers 0 1 2 3
+    python tune_mhc.py --kernel fused_mhc -M 1024 2048 4096 -n 4 -C 1024 --sinkhorn-iters 0 --workers 0 1 2 3
     python tune_mhc.py --kernel sinkhorn_knopp -M 1024 2048 4096 -n 8 -C 1024 --sinkhorn-iters 20
 """
 
@@ -26,6 +26,7 @@ import random
 
 from aiter.ops.triton.fusions.mhc import mhc
 
+
 # `sinkhorn_knopp` is no longer exported as a public op (its logic is fused into
 # `mhc`). The `--kernel sinkhorn_knopp` mode of this script is therefore broken
 # but kept as a no-op stub to avoid an import error when only `--kernel fused_mhc`
@@ -33,7 +34,7 @@ from aiter.ops.triton.fusions.mhc import mhc
 def sinkhorn_knopp(*args, **kwargs):  # noqa: D401
     raise RuntimeError(
         "sinkhorn_knopp is not exported as a standalone op anymore; the SK projection "
-        "is fused into `mhc`. Use `--kernel fused_mhc --hres-mode sinkhorn` instead."
+        "is fused into `mhc`. Use `--kernel fused_mhc` instead."
     )
 
 
@@ -81,48 +82,35 @@ def get_autotune_config(config_file, kernel):
         block_m = kernel_space.get("BLOCK_M", [64])
         block_n = kernel_space.get("BLOCK_N", [16])
         block_k = kernel_space.get("BLOCK_K", [64])
+        block_c = kernel_space.get("BLOCK_C", [64])
         num_ksplit = kernel_space.get("NUM_KSPLIT", [1])
         num_warps = kernel_space.get("num_warps", [4])
         num_stages = kernel_space.get("num_stages", [1])
         waves_per_eu = kernel_space.get("waves_per_eu", [2])
-        use_splitc_list = kernel_space.get("USE_REDUCE_SPLITC", [True])
-        block_m_splitc_list = kernel_space.get("BLOCK_M_SPLITC", [32])
-        block_c_splitc_list = kernel_space.get("BLOCK_C_SPLITC", [128])
 
         configs = []
-        # Prune: BLOCK_M_SPLITC/BLOCK_C_SPLITC only matter when USE_REDUCE_SPLITC=True.
-        # When False, emit a single inline-path config per GEMM-param tuple to avoid
-        # blowing up the search space with redundant rows.
-        for use_splitc in use_splitc_list:
-            splitc_choices = (
-                list(itertools.product(block_m_splitc_list, block_c_splitc_list))
-                if use_splitc
-                else [(None, None)]
-            )
-            for bm, bn, bk, nks, nw, ns, wpe, (bms, bcs) in itertools.product(
-                block_m,
-                block_n,
-                block_k,
-                num_ksplit,
-                num_warps,
-                num_stages,
-                waves_per_eu,
-                splitc_choices,
-            ):
-                cfg = dict(
+        for bm, bn, bk, bc, nks, nw, ns, wpe in itertools.product(
+            block_m,
+            block_n,
+            block_k,
+            block_c,
+            num_ksplit,
+            num_warps,
+            num_stages,
+            waves_per_eu,
+        ):
+            configs.append(
+                dict(
                     BLOCK_M=bm,
                     BLOCK_N=bn,
                     BLOCK_K=bk,
+                    BLOCK_C=bc,
                     NUM_KSPLIT=nks,
                     num_warps=nw,
                     num_stages=ns,
                     waves_per_eu=wpe,
-                    USE_REDUCE_SPLITC=use_splitc,
                 )
-                if use_splitc:
-                    cfg["BLOCK_M_SPLITC"] = bms
-                    cfg["BLOCK_C_SPLITC"] = bcs
-                configs.append(cfg)
+            )
     elif kernel == "sinkhorn_knopp":
         # Extract parameter ranges for sinkhorn_knopp
         block_m = kernel_space.get("BLOCK_M", [1])
@@ -151,7 +139,7 @@ def get_autotune_config(config_file, kernel):
     return configs
 
 
-def get_tensors_fused_mhc(M, n, C, dtype, hres_mode="lite"):
+def get_tensors_fused_mhc(M, n, C, dtype):
     """
     Generate input tensors for fused_mhc benchmarking.
 
@@ -160,16 +148,13 @@ def get_tensors_fused_mhc(M, n, C, dtype, hres_mode="lite"):
         n: Stream parameter (manifold dimension)
         C: Hidden dimension per stream
         dtype: Data type
-        hres_mode: H_res computation mode ("lite" or "sinkhorn")
 
     Returns:
         Tuple of (x, phi, alpha_pre, alpha_post, alpha_res, bias, n) for fused_mhc
     """
-    # generate_mhc_inputs() no longer takes a `mode` kwarg; the H^res branch
-    # is selected at the kernel call via `sinkhorn_iters` (mapped from hres_mode
-    # in `bench_worker_fused_mhc`).
-    x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val = (
-        generate_mhc_inputs(M, n, C, dtype)
+    # The H^res branch is selected at the kernel call via `sinkhorn_iters`.
+    x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val = generate_mhc_inputs(
+        M, n, C, dtype
     )
     return (x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val)
 
@@ -191,20 +176,20 @@ def get_tensors_sinkhorn(M, n, dtype):
     return logits
 
 
-def get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode=None):
+def get_config_cache_filename(kernel, M, n, C, sinkhorn_iters):
     """Generate cache filename for tracking tested configs."""
     if kernel == "fused_mhc":
-        return f"tested_configs_mhc_{kernel}_{hres_mode}_M{M}_n{n}_C{C}.json"
+        return f"tested_configs_mhc_{kernel}_sk{sinkhorn_iters}_M{M}_n{n}_C{C}.json"
     else:  # sinkhorn_knopp
         return f"tested_configs_mhc_{kernel}_M{M}_n{n}_iters{sinkhorn_iters}.json"
 
 
-def load_tested_configs(kernel, M, n, C, sinkhorn_iters, config_file, hres_mode=None):
+def load_tested_configs(kernel, M, n, C, sinkhorn_iters, config_file):
     """
     Load set of already tested config indices from disk.
     Returns empty set if config_file doesn't match (different tuning space).
     """
-    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode)
+    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters)
     try:
         with open(cache_file, "r") as f:
             data = json.load(f)
@@ -239,13 +224,12 @@ def save_tested_config(
     config_file,
     success=True,
     error_msg=None,
-    hres_mode=None,
 ):
     """
     Save a tested config to disk with file locking to prevent race conditions.
     Separates successful and failed configs for easy inspection.
     """
-    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters, hres_mode)
+    cache_file = get_config_cache_filename(kernel, M, n, C, sinkhorn_iters)
 
     # Use file locking to ensure atomic read-modify-write
     max_retries = 10
@@ -272,7 +256,6 @@ def save_tested_config(
                             "n": n,
                             "C": C,
                             "sinkhorn_iters": sinkhorn_iters,
-                            "hres_mode": hres_mode,
                             "config_file": config_file,
                             "tested_configs_successful": {},
                             "tested_configs_failed": {},
@@ -333,7 +316,7 @@ def bench_worker_fused_mhc(
     config,
     config_idx,
     config_file,
-    hres_mode,
+    sinkhorn_iters,
     device_id=None,
 ):
     """Worker function to run fused_mhc benchmark and put result in queue immediately."""
@@ -350,14 +333,9 @@ def bench_worker_fused_mhc(
                 pass
 
         # Generate inputs
-        (x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val) = (
-            get_tensors_fused_mhc(M, n, C, dtype, hres_mode)
+        x, phi, alpha_pre, alpha_post, alpha_res, bias, n_val = get_tensors_fused_mhc(
+            M, n, C, dtype
         )
-
-        # Map the legacy `hres_mode` flag onto the new `sinkhorn_iters` API:
-        #   "sinkhorn" -> 20 SK iterations (production default)
-        #   "lite"     -> 0  SK iterations (raw H^res logits)
-        sinkhorn_iters_for_call = 20 if hres_mode == "sinkhorn" else 0
 
         # Benchmark with config
         ms = triton.testing.do_bench(
@@ -369,7 +347,7 @@ def bench_worker_fused_mhc(
                 alpha_res,
                 bias,
                 n_val,
-                sinkhorn_iters=sinkhorn_iters_for_call,
+                sinkhorn_iters=sinkhorn_iters,
                 config=config,
             ),
             warmup=25,
@@ -389,12 +367,11 @@ def bench_worker_fused_mhc(
             M,
             n,
             C,
-            0,
+            sinkhorn_iters,
             config_idx,
             config,
             config_file,
             success=True,
-            hres_mode=hres_mode,
         )
 
         # Put result in queue immediately
@@ -424,13 +401,12 @@ def bench_worker_fused_mhc(
             M,
             n,
             C,
-            0,
+            sinkhorn_iters,
             config_idx,
             config,
             config_file,
             success=False,
             error_msg=error_msg,
-            hres_mode=hres_mode,
         )
 
         # Put failure result in queue
@@ -555,7 +531,6 @@ def result_monitor(
     n,
     C,
     sinkhorn_iters,
-    hres_mode,
     fname,
     stop_event,
     tested_configs_file,
@@ -582,8 +557,8 @@ def result_monitor(
         best_configs = {}
 
     if kernel == "fused_mhc":
-        shape_str = f"M={M}, n={n}, C={C}, mode={hres_mode}"
-        config_key = f"M{M}_n{n}_C{C}_{hres_mode}"
+        shape_str = f"M={M}, n={n}, C={C}, sinkhorn_iters={sinkhorn_iters}"
+        config_key = f"M{M}_n{n}_C{C}_sk{sinkhorn_iters}"
     else:
         shape_str = f"M={M}, n={n}, iters={sinkhorn_iters}"
         config_key = f"M{M}_n{n}_iters{sinkhorn_iters}"
@@ -624,7 +599,6 @@ def result_monitor(
                         "n": n,
                         "C": C,
                         "sinkhorn_iters": sinkhorn_iters,
-                        "hres_mode": hres_mode,
                     }
 
                     # Write to file immediately
@@ -726,7 +700,7 @@ def worker_batch_fused_mhc(
     configs_indexed,
     stop_event,
     config_file,
-    hres_mode,
+    sinkhorn_iters,
     device_id=None,
 ):
     """
@@ -754,7 +728,7 @@ def worker_batch_fused_mhc(
             config,
             original_idx,
             config_file,
-            hres_mode,
+            sinkhorn_iters,
             device_id,
         )
 
@@ -843,14 +817,7 @@ def parse_args():
         "--sinkhorn-iters",
         type=int,
         default=20,
-        help="Number of Sinkhorn-Knopp iterations (for sinkhorn_knopp)",
-    )
-    parser.add_argument(
-        "--hres-mode",
-        type=str,
-        default="lite",
-        choices=["lite", "sinkhorn"],
-        help="H_res computation mode for fused_mhc (lite or sinkhorn)",
+        help="Number of in-kernel Sinkhorn-Knopp iterations on H^res (default 20; 0 = raw logits, no SK).",
     )
 
     # Data type
@@ -918,16 +885,12 @@ def main():
     n = args.n
     C_list = args.C
     sinkhorn_iters = args.sinkhorn_iters
-    hres_mode = args.hres_mode
 
     print(f"Tuning kernel: {kernel}")
     print(f"M values: {M_list}")
     print(f"n: {n}")
     print(f"C values: {C_list}")
-    if kernel == "fused_mhc":
-        print(f"H_res mode: {hres_mode}")
-    else:
-        print(f"Sinkhorn iterations: {sinkhorn_iters}")
+    print(f"Sinkhorn iterations: {sinkhorn_iters}")
     print(f"Data type: {args.dtype}")
     sys.stdout.flush()
 
@@ -988,7 +951,7 @@ def main():
         # Generate C-specific output filename
         if kernel == "fused_mhc":
             M_str = "_".join(str(m) for m in M_list)
-            fname = f"best_configs_mhc_{kernel}_{hres_mode}_M{M_str}_n{n}_C{C}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+            fname = f"best_configs_mhc_{kernel}_sk{sinkhorn_iters}_M{M_str}_n{n}_C{C}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
         else:
             M_str = "_".join(str(m) for m in M_list)
             fname = f"best_configs_mhc_{kernel}_M{M_str}_n{n}_iters{sinkhorn_iters}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
@@ -1000,7 +963,7 @@ def main():
             print(f"\n{'='*80}")
             if kernel == "fused_mhc":
                 print(
-                    f"Starting tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}"
+                    f"Starting tuning for {kernel}: M={M}, n={n}, C={C}, sinkhorn_iters={sinkhorn_iters}"
                 )
             else:
                 print(
@@ -1011,7 +974,7 @@ def main():
 
             # Load already tested config indices for this shape
             tested_indices = load_tested_configs(
-                kernel, M, n, C, sinkhorn_iters, args.config_file, hres_mode
+                kernel, M, n, C, sinkhorn_iters, args.config_file
             )
             if tested_indices:
                 # Convert string keys back to integers
@@ -1044,7 +1007,7 @@ def main():
 
             # Generate the tested configs filename for this shape
             tested_configs_file = get_config_cache_filename(
-                kernel, M, n, C, sinkhorn_iters, hres_mode
+                kernel, M, n, C, sinkhorn_iters
             )
 
             # Start the result monitor process
@@ -1060,7 +1023,6 @@ def main():
                     n,
                     C,
                     sinkhorn_iters,
-                    hres_mode,
                     fname,
                     stop_event,
                     tested_configs_file,
@@ -1100,7 +1062,7 @@ def main():
                             worker_configs_indexed,
                             stop_event,
                             args.config_file,
-                            hres_mode,
+                            sinkhorn_iters,
                             device_id,
                         ),
                     )
@@ -1135,7 +1097,7 @@ def main():
 
             if kernel == "fused_mhc":
                 print(
-                    f"[Main] Completed tuning for {kernel}: M={M}, n={n}, C={C}, mode={hres_mode}\n"
+                    f"[Main] Completed tuning for {kernel}: M={M}, n={n}, C={C}, sinkhorn_iters={sinkhorn_iters}\n"
                 )
             else:
                 print(
@@ -1162,7 +1124,7 @@ def main():
     print(f"TUNING COMPLETE")
     print(f"  Kernel: {kernel}")
     if kernel == "fused_mhc":
-        print(f"  H_res mode: {hres_mode}")
+        print(f"  Sinkhorn iterations: {sinkhorn_iters}")
         print(f"  C values tuned: {C_list}")
     print(f"  Total time: {overall_total_time}")
     print(f"  M values per C: {len(M_list)}")

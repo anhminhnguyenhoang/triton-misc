@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 """Inject MHC tuner winners into the production per-C JSON config files.
 
-Reads the latest `best_configs_mhc_fused_mhc_<hres>_M*_n*_C*.json` files emitted
+Reads the latest `best_configs_mhc_fused_mhc_sk*_M*_n*_C*.json` files emitted
 by `tune_mhc.py` (one file per C bucket) and merges each `(M, C)` winner into
-`aiter/ops/triton/configs/{arch}-MHC_FUSED_<HRES>-C={C}.json` under the matching
-`M_LEQ_<M>` bucket. The catch-all `"any"` entry is also refreshed with the
-largest-M winner.
+`aiter/ops/triton/configs/{arch}-MHC_FUSED_SINKHORN-C={C}.json` under the
+matching `M_LEQ_<M>` bucket. The catch-all `"any"` entry is also refreshed with
+the largest-M winner.
 
 Usage (from /home/anguyenh/aiter):
-    python tuning_results/refresh_mhc_configs.py                 # default: gfx942 + gfx950, sinkhorn
+    python tuning_results/refresh_mhc_configs.py                 # default: active arch
     python tuning_results/refresh_mhc_configs.py --arches gfx950
-    python tuning_results/refresh_mhc_configs.py --hres-mode lite
     python tuning_results/refresh_mhc_configs.py --tuner-glob 'best_configs_mhc_*_C*.json'
     python tuning_results/refresh_mhc_configs.py --dry-run
 
@@ -19,10 +18,8 @@ Notes:
   unchanged - the tuner only sweeps M >= 1024.
 - `BLOCK_N` is dropped from the merged config because the wrapper always derives
   it from `n_squared` at launch time.
-- Split-C block sizes (`BLOCK_M_SPLITC`, `BLOCK_C_SPLITC`) are kept only when
-  `USE_REDUCE_SPLITC=True`; the tuner already emits `None` for the inline path
-  and we strip those.
 """
+
 import argparse
 import glob
 import json
@@ -32,7 +29,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CONFIG_DIR = REPO_ROOT / "aiter" / "ops" / "triton" / "configs"
-DEFAULT_TUNER_GLOB = "best_configs_mhc_fused_mhc_{hres}_M*_n*_C*.json"
+DEFAULT_TUNER_GLOB = "best_configs_mhc_fused_mhc_sk*_M*_n*_C*.json"
 
 
 def detect_active_arch() -> str | None:
@@ -44,6 +41,7 @@ def detect_active_arch() -> str | None:
     """
     try:
         from aiter.ops.triton.utils._triton import arch_info
+
         return arch_info.get_arch()
     except Exception:
         return None
@@ -76,9 +74,9 @@ def clean_config(cfg: dict) -> dict:
     return out
 
 
-def merge_into_json(c: int, winners_by_m: dict, arch: str, hres: str, dry_run: bool) -> bool:
-    """Update `{arch}-MHC_FUSED_{HRES}-C={c}.json`. Return True if anything changed."""
-    fname = f"{arch}-MHC_FUSED_{hres.upper()}-C={c}.json"
+def merge_into_json(c: int, winners_by_m: dict, arch: str, dry_run: bool) -> bool:
+    """Update `{arch}-MHC_FUSED_SINKHORN-C={c}.json`. Return True if anything changed."""
+    fname = f"{arch}-MHC_FUSED_SINKHORN-C={c}.json"
     path = CONFIG_DIR / fname
     if not path.exists():
         print(f"  [skip] {fname} (does not exist)")
@@ -92,9 +90,7 @@ def merge_into_json(c: int, winners_by_m: dict, arch: str, hres: str, dry_run: b
         new_cfg = clean_config(cfg)
         if existing.get(bucket) != new_cfg:
             existing[bucket] = new_cfg
-            changes.append(
-                f"      {bucket}: {time_ms*1000:>7.1f}us  USE_REDUCE_SPLITC={new_cfg.get('USE_REDUCE_SPLITC')}"
-            )
+            changes.append(f"      {bucket}: {time_ms*1000:>7.1f}us")
 
     # Refresh "any" with the largest-M tuned config.
     if winners_by_m:
@@ -132,12 +128,6 @@ def main():
         ),
     )
     p.add_argument(
-        "--hres-mode",
-        default="sinkhorn",
-        choices=["sinkhorn", "lite"],
-        help="H_res mode the tuner ran in (default: sinkhorn).",
-    )
-    p.add_argument(
         "--tuner-glob",
         default=None,
         help=(
@@ -163,10 +153,12 @@ def main():
         args.arches = [active]
         print(f"[info] defaulting --arches to active arch: {active}")
 
-    tuner_glob = args.tuner_glob or DEFAULT_TUNER_GLOB.format(hres=args.hres_mode)
+    tuner_glob = args.tuner_glob or DEFAULT_TUNER_GLOB
     files = sorted(glob.glob(str(REPO_ROOT / tuner_glob)))
     if not files:
-        print(f"[error] no tuner outputs found matching {tuner_glob!r}", file=sys.stderr)
+        print(
+            f"[error] no tuner outputs found matching {tuner_glob!r}", file=sys.stderr
+        )
         return 1
 
     print(f"Found {len(files)} tuner file(s):")
@@ -182,9 +174,7 @@ def main():
     any_changes = False
     for c in sorted(winners):
         for arch in args.arches:
-            any_changes |= merge_into_json(
-                c, winners[c], arch, args.hres_mode, args.dry_run
-            )
+            any_changes |= merge_into_json(c, winners[c], arch, args.dry_run)
         print()
 
     if args.dry_run:
