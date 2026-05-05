@@ -1,0 +1,73 @@
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_mhc] under /home/anguyenh/aiter/aiter/jit/module_mhc.so
+[aiter] post_mix mismatch between Triton and HIP at (M=1024, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=1024, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=1024, n=4, C=512)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=2048, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=2048, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=2048, n=4, C=512)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=4096, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=4096, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=4096, n=4, C=512)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=8192, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=8192, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=8192, n=4, C=512)[checkAllclose atol=0.08 rtol=0.02 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:0.145782470703125, delta details: 0.0% (11 of 4194304) elements
+[aiter] post_mix mismatch between Triton and HIP at (M=16384, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=16384, n=4, C=512)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=16384, n=4, C=512)[checkAllclose atol=0.08 rtol=0.02 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:0.08441162109375, delta details: 0.0% (2 of 8388608) elements
+[aiter] post_mix mismatch between Triton and HIP at (M=1024, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=1024, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=1024, n=4, C=4096)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=2048, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=2048, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=2048, n=4, C=4096)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=4096, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=4096, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] layer_input mismatch between Triton and HIP at (M=4096, n=4, C=4096)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=8192, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=8192, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:0.05414015054702759, delta details: 0.0% (1 of 131072) elements
+[aiter] layer_input mismatch between Triton and HIP at (M=8192, n=4, C=4096)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=16384, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=16384, n=4, C=4096)[checkAllclose atol=0.04 rtol=0.01 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:0.0527195930480957, delta details: 0.0% (2 of 262144) elements
+[aiter] layer_input mismatch between Triton and HIP at (M=16384, n=4, C=4096)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=1024, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=1024, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:nan, delta details: 0.6% (97 of 16384) elements
+[aiter] layer_input mismatch between Triton and HIP at (M=1024, n=4, C=32768)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=2048, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=2048, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:nan, delta details: 1.5% (493 of 32768) elements
+[aiter] layer_input mismatch between Triton and HIP at (M=2048, n=4, C=32768)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=4096, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=4096, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:nan, delta details: 1.8% (1172 of 65536) elements
+[aiter] layer_input mismatch between Triton and HIP at (M=4096, n=4, C=32768)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=8192, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=8192, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:nan, delta details: 1.0% (1349 of 131072) elements
+[aiter] layer_input mismatch between Triton and HIP at (M=8192, n=4, C=32768)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+[aiter] post_mix mismatch between Triton and HIP at (M=16384, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [32mpassed~[0m]
+[aiter] comb_mix mismatch between Triton and HIP at (M=16384, n=4, C=32768)[checkAllclose atol=0.04 rtol=0.01 [33mwarning![0m] a and b results are not all close
+[aiter] -->max abs delta:nan, delta details: 0.0% (105 of 262144) elements
+[aiter] layer_input mismatch between Triton and HIP at (M=16384, n=4, C=32768)[checkAllclose atol=0.08 rtol=0.02 [32mpassed~[0m]
+bench_mhc_sinkhorn-20iters_triton+hip:
+          M    n        C  triton_time(ms) ()  hip_time(ms) ()  triton_throughput(TFLOPS) ()  hip_throughput(TFLOPS) ()  triton_bandwidth(GB/s) ()  hip_bandwidth(GB/s) ()  triton_arithmetic_intensity(FLOP/byte) ()  hip_arithmetic_intensity(FLOP/byte) ()
+0    1024.0  4.0    512.0            0.020349         0.016128                      5.729898                   7.257560                 469.979600              589.108444                                  12.167543                               12.167543
+1    2048.0  4.0    512.0            0.020758         0.020422                     11.283772                  11.434998                 921.125474              931.256675                                  12.230377                               12.230377
+2    4096.0  4.0    512.0            0.028660         0.030972                     15.025294                  15.069480                1210.038754             1228.812128                                  12.262038                               12.262038
+3    8192.0  4.0    512.0            0.026481         0.043749                     35.963632                  21.277726                2890.119352             1732.327659                                  12.277930                               12.277930
+4   16384.0  4.0    512.0            0.037345         0.071973                     49.733553                  25.902834                4041.609717             2107.666703                                  12.285892                               12.285892
+5    1024.0  4.0   4096.0            0.028031         0.038635                     32.236425                  23.498601                2716.979691             1973.601367                                  11.912832                               11.912832
+6    2048.0  4.0   4096.0            0.037734         0.054396                     47.891415                  33.396887                3983.291455             2787.626471                                  11.974531                               11.974531
+7    4096.0  4.0   4096.0            0.068412         0.097558                     53.087638                  37.339733                4419.156561             3109.782553                                  12.005621                               12.005621
+8    8192.0  4.0   4096.0            0.149433         0.194482                     48.898858                  37.402088                4061.214042             3111.669634                                  12.021226                               12.021226
+9   16384.0  4.0   4096.0            0.282747         0.341765                     51.679894                  42.564750                4297.911618             3540.818012                                  12.029044                               12.029044
+10   1024.0  4.0  32768.0            0.176247         0.186517                     41.206796                  38.880608                3471.663840             3272.277693                                  11.880859                               11.880859
+11   2048.0  4.0  32768.0            0.308927         0.356561                     47.115144                  40.771466                3936.166707             3404.419080                                  11.942414                               11.942414
+12   4096.0  4.0  32768.0            0.518292         0.715117                     56.062181                  40.597808                4681.188689             3385.771939                                  11.973432                               11.973432
+13   8192.0  4.0  32768.0            0.954219         1.354921                     60.710235                  42.704154                5061.377392             3565.791307                                  11.989001                               11.989001
+14  16384.0  4.0  32768.0            1.804664         2.592467                     64.266029                  44.736492                5358.665354             3729.168296                                  11.996801                               11.996801

@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
-# Focused re-tune of the (M, C) shapes where Triton currently regresses or loses
-# to HIP, using a high patience setting (5000) to give the random walk a fair
-# chance of reaching the better region of the search space.
+# Focused re-tune of the (M, C) shapes where Triton still regresses or loses to
+# HIP after the latest full sweep, using a higher patience setting to give the
+# random walk a fair chance of reaching the better region of the search space.
 #
-# Targets:
-#   - C=512 : M=1024, 2048 (lose to HIP), M=8192 (regressed vs 3.5.1)
-#   - C=4096: M=1024, 2048 (lose to HIP), M=16384 (regressed vs 3.5.1)
-#   - C=32768: M=1024, 2048 (lose to HIP)
+# IMPORTANT: clear the corresponding `tested_configs_mhc_fused_mhc_sk20_M*_n*_C*.json`
+# files before running, otherwise the cache will skip the previously-tested space
+# and the search will mostly re-confirm the existing winner.
+#
+# Round-2 (post-refactor) targets:
+#   - C=512: M=1024 (HIP 1.57x), M=2048 (HIP 1.03x, near-tie)
 #
 # Run from inside the dev container under setsid nohup:
 #   setsid nohup bash tuning_results/run_tune_problem_shapes.sh \
@@ -16,7 +18,7 @@ set -euo pipefail
 cd /home/anguyenh/aiter
 mkdir -p tuning_results/logs
 
-PATIENCE="${PATIENCE:-5000}"
+PATIENCE="${PATIENCE:-1000}"
 
 run_tune() {
   local C=$1
@@ -29,8 +31,6 @@ run_tune() {
     2>&1 | tee tuning_results/logs/tune_C${C}_problem.log
 }
 
-run_tune 512   "1024 2048 8192"
-run_tune 4096  "1024 2048 16384"
-run_tune 32768 "1024 2048"
+run_tune 512 "1024 2048"
 
 echo "[$(date)] === All problem shapes done ==="

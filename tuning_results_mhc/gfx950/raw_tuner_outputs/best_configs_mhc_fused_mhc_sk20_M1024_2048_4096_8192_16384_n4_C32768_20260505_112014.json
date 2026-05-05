@@ -1,0 +1,92 @@
+{
+  "M1024_n4_C32768_sk20": {
+    "config": {
+      "BLOCK_M": 32,
+      "BLOCK_N": 16,
+      "BLOCK_K": 256,
+      "BLOCK_C": 256,
+      "NUM_KSPLIT": 8,
+      "num_warps": 4,
+      "num_stages": 1,
+      "waves_per_eu": 0
+    },
+    "time_ms": 0.1928278677916342,
+    "kernel": "fused_mhc",
+    "M": 1024,
+    "n": 4,
+    "C": 32768,
+    "sinkhorn_iters": 20
+  },
+  "M2048_n4_C32768_sk20": {
+    "config": {
+      "BLOCK_M": 64,
+      "BLOCK_N": 16,
+      "BLOCK_K": 256,
+      "BLOCK_C": 256,
+      "NUM_KSPLIT": 8,
+      "num_warps": 4,
+      "num_stages": 2,
+      "waves_per_eu": 0
+    },
+    "time_ms": 0.30693345813901274,
+    "kernel": "fused_mhc",
+    "M": 2048,
+    "n": 4,
+    "C": 32768,
+    "sinkhorn_iters": 20
+  },
+  "M4096_n4_C32768_sk20": {
+    "config": {
+      "BLOCK_M": 64,
+      "BLOCK_N": 16,
+      "BLOCK_K": 128,
+      "BLOCK_C": 256,
+      "NUM_KSPLIT": 8,
+      "num_warps": 4,
+      "num_stages": 2,
+      "waves_per_eu": 0
+    },
+    "time_ms": 0.5147237054185371,
+    "kernel": "fused_mhc",
+    "M": 4096,
+    "n": 4,
+    "C": 32768,
+    "sinkhorn_iters": 20
+  },
+  "M8192_n4_C32768_sk20": {
+    "config": {
+      "BLOCK_M": 128,
+      "BLOCK_N": 16,
+      "BLOCK_K": 64,
+      "BLOCK_C": 64,
+      "NUM_KSPLIT": 8,
+      "num_warps": 4,
+      "num_stages": 2,
+      "waves_per_eu": 2
+    },
+    "time_ms": 0.949293320227151,
+    "kernel": "fused_mhc",
+    "M": 8192,
+    "n": 4,
+    "C": 32768,
+    "sinkhorn_iters": 20
+  },
+  "M16384_n4_C32768_sk20": {
+    "config": {
+      "BLOCK_M": 128,
+      "BLOCK_N": 16,
+      "BLOCK_K": 64,
+      "BLOCK_C": 64,
+      "NUM_KSPLIT": 4,
+      "num_warps": 4,
+      "num_stages": 2,
+      "waves_per_eu": 0
+    },
+    "time_ms": 1.7956130968199835,
+    "kernel": "fused_mhc",
+    "M": 16384,
+    "n": 4,
+    "C": 32768,
+    "sinkhorn_iters": 20
+  }
+}

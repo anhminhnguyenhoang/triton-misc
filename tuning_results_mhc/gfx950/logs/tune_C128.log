@@ -1,0 +1,316 @@
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+Tuning kernel: fused_mhc
+M values: [1024, 2048, 4096, 8192, 16384]
+n: 4
+C values: [128]
+Sinkhorn iterations: 20
+Data type: bf16
+Loaded tuning space from 'tuning_results/tuning_space_mhc.json'
+Total configurations to tune: 5760 (shuffled randomly)
+Using 4 worker(s) on GPU(s): [4, 5, 6, 7]
+
+################################################################################
+# TUNING C=128
+################################################################################
+
+================================================================================
+Starting tuning for fused_mhc: M=1024, n=4, C=128, sinkhorn_iters=20
+================================================================================
+[Main] Found 5711 previously tested configs, will skip them
+[Main] Testing 49/5760 configs (skipping 5711 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=1024, n=4, C=128, sinkhorn_iters=20
+[Monitor] Waiting for 49 benchmark results...
+[Monitor] Will stop early if no improvement after 3000 configs
+[Monitor] ✓ New best! Config 424/49: 0.033 ms (Progress: 1/49)
+[Monitor] ✓ New best! Config 2666/49: 0.024 ms (Progress: 4/49)
+[Monitor] ✓ New best! Config 508/49: 0.016 ms (Progress: 6/49)
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=1024, n=4, C=128, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 49/49
+[Monitor] Valid results: 49
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.016 ms
+[Monitor] Best config index: 508
+[Monitor] Best config: {'BLOCK_M': 32, 'BLOCK_N': 16, 'BLOCK_K': 64, 'BLOCK_C': 64, 'NUM_KSPLIT': 1, 'num_warps': 2, 'num_stages': 2, 'waves_per_eu': 0}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C128_20260505_101720.json
+[Monitor] ================================================================================
+
+[Main] Completed tuning for fused_mhc: M=1024, n=4, C=128, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=2048, n=4, C=128, sinkhorn_iters=20
+================================================================================
+[Main] Found 3664 previously tested configs, will skip them
+[Main] Testing 2096/5760 configs (skipping 3664 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=2048, n=4, C=128, sinkhorn_iters=20
+[Monitor] Waiting for 2096 benchmark results...
+[Monitor] Will stop early if no improvement after 3000 configs
+[Monitor] ✓ New best! Config 541/2096: 0.031 ms (Progress: 1/2096)
+[Monitor] ✓ New best! Config 534/2096: 0.030 ms (Progress: 2/2096)
+[Monitor] ✓ New best! Config 3644/2096: 0.030 ms (Progress: 3/2096)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 1039/2096: 0.029 ms (Progress: 5/2096)
+[Monitor] ✓ New best! Config 2237/2096: 0.023 ms (Progress: 6/2096)
+[Monitor] ✓ New best! Config 1304/2096: 0.015 ms (Progress: 8/2096)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] Progress: 58/2096 (Valid: 58, Failed: 0, Best: 0.015 ms, No improvement: 50/3000)
+[Monitor] Progress: 108/2096 (Valid: 108, Failed: 0, Best: 0.015 ms, No improvement: 100/3000)
+[Monitor] Progress: 158/2096 (Valid: 158, Failed: 0, Best: 0.015 ms, No improvement: 150/3000)
+[Monitor] Progress: 208/2096 (Valid: 208, Failed: 0, Best: 0.015 ms, No improvement: 200/3000)
+[Monitor] ✓ New best! Config 1369/2096: 0.015 ms (Progress: 216/2096)
+[Monitor] Progress: 266/2096 (Valid: 266, Failed: 0, Best: 0.015 ms, No improvement: 50/3000)
+[Monitor] ✓ New best! Config 946/2096: 0.014 ms (Progress: 285/2096)
+[Monitor] Progress: 335/2096 (Valid: 335, Failed: 0, Best: 0.014 ms, No improvement: 50/3000)
+[Monitor] Progress: 385/2096 (Valid: 385, Failed: 0, Best: 0.014 ms, No improvement: 100/3000)
+[Monitor] Progress: 435/2096 (Valid: 435, Failed: 0, Best: 0.014 ms, No improvement: 150/3000)
+[Monitor] ✓ New best! Config 1380/2096: 0.014 ms (Progress: 476/2096)
+[Monitor] Progress: 526/2096 (Valid: 526, Failed: 0, Best: 0.014 ms, No improvement: 50/3000)
+[Monitor] Progress: 576/2096 (Valid: 576, Failed: 0, Best: 0.014 ms, No improvement: 100/3000)
+[Monitor] Progress: 626/2096 (Valid: 626, Failed: 0, Best: 0.014 ms, No improvement: 150/3000)
+[Monitor] Progress: 676/2096 (Valid: 676, Failed: 0, Best: 0.014 ms, No improvement: 200/3000)
+[Monitor] Progress: 726/2096 (Valid: 726, Failed: 0, Best: 0.014 ms, No improvement: 250/3000)
+[Monitor] Progress: 776/2096 (Valid: 776, Failed: 0, Best: 0.014 ms, No improvement: 300/3000)
+[Monitor] Progress: 826/2096 (Valid: 826, Failed: 0, Best: 0.014 ms, No improvement: 350/3000)
+[Monitor] Progress: 876/2096 (Valid: 876, Failed: 0, Best: 0.014 ms, No improvement: 400/3000)
+[Monitor] Progress: 926/2096 (Valid: 926, Failed: 0, Best: 0.014 ms, No improvement: 450/3000)
+[Monitor] Progress: 976/2096 (Valid: 976, Failed: 0, Best: 0.014 ms, No improvement: 500/3000)
+[Monitor] Progress: 1026/2096 (Valid: 1026, Failed: 0, Best: 0.014 ms, No improvement: 550/3000)
+[Monitor] Progress: 1076/2096 (Valid: 1076, Failed: 0, Best: 0.014 ms, No improvement: 600/3000)
+[Monitor] Progress: 1126/2096 (Valid: 1126, Failed: 0, Best: 0.014 ms, No improvement: 650/3000)
+[Monitor] Progress: 1176/2096 (Valid: 1176, Failed: 0, Best: 0.014 ms, No improvement: 700/3000)
+[Monitor] Progress: 1226/2096 (Valid: 1226, Failed: 0, Best: 0.014 ms, No improvement: 750/3000)
+[Monitor] Progress: 1276/2096 (Valid: 1276, Failed: 0, Best: 0.014 ms, No improvement: 800/3000)
+[Monitor] Progress: 1326/2096 (Valid: 1326, Failed: 0, Best: 0.014 ms, No improvement: 850/3000)
+[Monitor] Progress: 1376/2096 (Valid: 1376, Failed: 0, Best: 0.014 ms, No improvement: 900/3000)
+[Monitor] Progress: 1426/2096 (Valid: 1426, Failed: 0, Best: 0.014 ms, No improvement: 950/3000)
+[Monitor] Progress: 1476/2096 (Valid: 1476, Failed: 0, Best: 0.014 ms, No improvement: 1000/3000)
+[Monitor] Progress: 1526/2096 (Valid: 1526, Failed: 0, Best: 0.014 ms, No improvement: 1050/3000)
+[Monitor] Progress: 1576/2096 (Valid: 1576, Failed: 0, Best: 0.014 ms, No improvement: 1100/3000)
+[Monitor] Progress: 1626/2096 (Valid: 1626, Failed: 0, Best: 0.014 ms, No improvement: 1150/3000)
+[Monitor] Progress: 1676/2096 (Valid: 1676, Failed: 0, Best: 0.014 ms, No improvement: 1200/3000)
+[Monitor] Progress: 1726/2096 (Valid: 1726, Failed: 0, Best: 0.014 ms, No improvement: 1250/3000)
+[Monitor] Progress: 1776/2096 (Valid: 1776, Failed: 0, Best: 0.014 ms, No improvement: 1300/3000)
+[Monitor] Progress: 1826/2096 (Valid: 1826, Failed: 0, Best: 0.014 ms, No improvement: 1350/3000)
+[Monitor] Progress: 1876/2096 (Valid: 1876, Failed: 0, Best: 0.014 ms, No improvement: 1400/3000)
+[Monitor] Progress: 1926/2096 (Valid: 1926, Failed: 0, Best: 0.014 ms, No improvement: 1450/3000)
+[Monitor] Progress: 1976/2096 (Valid: 1976, Failed: 0, Best: 0.014 ms, No improvement: 1500/3000)
+[Monitor] Progress: 2026/2096 (Valid: 2026, Failed: 0, Best: 0.014 ms, No improvement: 1550/3000)
+[Monitor] Progress: 2076/2096 (Valid: 2076, Failed: 0, Best: 0.014 ms, No improvement: 1600/3000)
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=2048, n=4, C=128, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 2096/2096
+[Monitor] Valid results: 2096
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.014 ms
+[Monitor] Best config index: 1380
+[Monitor] Best config: {'BLOCK_M': 32, 'BLOCK_N': 16, 'BLOCK_K': 256, 'BLOCK_C': 256, 'NUM_KSPLIT': 1, 'num_warps': 4, 'num_stages': 2, 'waves_per_eu': 2}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C128_20260505_101720.json
+[Monitor] ================================================================================
+
+[Main] Completed tuning for fused_mhc: M=2048, n=4, C=128, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=4096, n=4, C=128, sinkhorn_iters=20
+================================================================================
+[Main] Found 4689 previously tested configs, will skip them
+[Main] Testing 1071/5760 configs (skipping 4689 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=4096, n=4, C=128, sinkhorn_iters=20
+[Monitor] Waiting for 1071 benchmark results...
+[Monitor] Will stop early if no improvement after 3000 configs
+[Monitor] ✓ New best! Config 541/1071: 0.032 ms (Progress: 1/1071)
+[Monitor] ✓ New best! Config 2237/1071: 0.024 ms (Progress: 4/1071)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 3470/1071: 0.023 ms (Progress: 7/1071)
+[Monitor] ✓ New best! Config 508/1071: 0.018 ms (Progress: 11/1071)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 2385/1071: 0.016 ms (Progress: 51/1071)
+[Monitor] ✓ New best! Config 2672/1071: 0.016 ms (Progress: 97/1071)
+[Monitor] ✓ New best! Config 2744/1071: 0.016 ms (Progress: 109/1071)
+[Monitor] Progress: 159/1071 (Valid: 159, Failed: 0, Best: 0.016 ms, No improvement: 50/3000)
+[Monitor] Progress: 209/1071 (Valid: 209, Failed: 0, Best: 0.016 ms, No improvement: 100/3000)
+[Monitor] Progress: 259/1071 (Valid: 259, Failed: 0, Best: 0.016 ms, No improvement: 150/3000)
+[Monitor] ✓ New best! Config 2312/1071: 0.016 ms (Progress: 267/1071)
+[Monitor] Progress: 317/1071 (Valid: 317, Failed: 0, Best: 0.016 ms, No improvement: 50/3000)
+[Monitor] Progress: 367/1071 (Valid: 367, Failed: 0, Best: 0.016 ms, No improvement: 100/3000)
+[Monitor] ✓ New best! Config 1226/1071: 0.016 ms (Progress: 396/1071)
+[Monitor] Progress: 446/1071 (Valid: 446, Failed: 0, Best: 0.016 ms, No improvement: 50/3000)
+[Monitor] Progress: 496/1071 (Valid: 496, Failed: 0, Best: 0.016 ms, No improvement: 100/3000)
+[Monitor] Progress: 546/1071 (Valid: 546, Failed: 0, Best: 0.016 ms, No improvement: 150/3000)
+[Monitor] Progress: 596/1071 (Valid: 596, Failed: 0, Best: 0.016 ms, No improvement: 200/3000)
+[Monitor] ✓ New best! Config 2676/1071: 0.016 ms (Progress: 639/1071)
+[Monitor] Progress: 689/1071 (Valid: 689, Failed: 0, Best: 0.016 ms, No improvement: 50/3000)
+[Monitor] Progress: 739/1071 (Valid: 739, Failed: 0, Best: 0.016 ms, No improvement: 100/3000)
+[Monitor] ✓ New best! Config 2242/1071: 0.015 ms (Progress: 752/1071)
+[Monitor] Progress: 802/1071 (Valid: 802, Failed: 0, Best: 0.015 ms, No improvement: 50/3000)
+[Monitor] Progress: 852/1071 (Valid: 852, Failed: 0, Best: 0.015 ms, No improvement: 100/3000)
+[Monitor] Progress: 902/1071 (Valid: 902, Failed: 0, Best: 0.015 ms, No improvement: 150/3000)
+[Monitor] Progress: 952/1071 (Valid: 952, Failed: 0, Best: 0.015 ms, No improvement: 200/3000)
+[Monitor] Progress: 1002/1071 (Valid: 1002, Failed: 0, Best: 0.015 ms, No improvement: 250/3000)
+[Monitor] Progress: 1052/1071 (Valid: 1052, Failed: 0, Best: 0.015 ms, No improvement: 300/3000)
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=4096, n=4, C=128, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 1071/1071
+[Monitor] Valid results: 1071
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.015 ms
+[Monitor] Best config index: 2242
+[Monitor] Best config: {'BLOCK_M': 64, 'BLOCK_N': 16, 'BLOCK_K': 128, 'BLOCK_C': 32, 'NUM_KSPLIT': 1, 'num_warps': 4, 'num_stages': 2, 'waves_per_eu': 0}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C128_20260505_101720.json
+[Monitor] ================================================================================
+
+[Main] Completed tuning for fused_mhc: M=4096, n=4, C=128, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=8192, n=4, C=128, sinkhorn_iters=20
+================================================================================
+[Main] Found 4216 previously tested configs, will skip them
+[Main] Testing 1544/5760 configs (skipping 4216 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=8192, n=4, C=128, sinkhorn_iters=20
+[Monitor] Waiting for 1544 benchmark results...
+[Monitor] Will stop early if no improvement after 3000 configs
+[Monitor] ✓ New best! Config 534/1544: 0.030 ms (Progress: 1/1544)
+[Monitor] ✓ New best! Config 2237/1544: 0.025 ms (Progress: 4/1544)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 3470/1544: 0.023 ms (Progress: 6/1544)
+[Monitor] ✓ New best! Config 4047/1544: 0.022 ms (Progress: 13/1544)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] ✓ New best! Config 2385/1544: 0.018 ms (Progress: 21/1544)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[Monitor] Progress: 71/1544 (Valid: 71, Failed: 0, Best: 0.018 ms, No improvement: 50/3000)
+[Monitor] Progress: 121/1544 (Valid: 121, Failed: 0, Best: 0.018 ms, No improvement: 100/3000)
+[Monitor] Progress: 171/1544 (Valid: 171, Failed: 0, Best: 0.018 ms, No improvement: 150/3000)
+[Monitor] Progress: 221/1544 (Valid: 221, Failed: 0, Best: 0.018 ms, No improvement: 200/3000)
+[Monitor] Progress: 271/1544 (Valid: 271, Failed: 0, Best: 0.018 ms, No improvement: 250/3000)
+[Monitor] Progress: 321/1544 (Valid: 321, Failed: 0, Best: 0.018 ms, No improvement: 300/3000)
+[Monitor] Progress: 371/1544 (Valid: 371, Failed: 0, Best: 0.018 ms, No improvement: 350/3000)
+[Monitor] Progress: 421/1544 (Valid: 421, Failed: 0, Best: 0.018 ms, No improvement: 400/3000)
+[Monitor] Progress: 471/1544 (Valid: 471, Failed: 0, Best: 0.018 ms, No improvement: 450/3000)
+[Monitor] Progress: 521/1544 (Valid: 521, Failed: 0, Best: 0.018 ms, No improvement: 500/3000)
+[Monitor] Progress: 571/1544 (Valid: 571, Failed: 0, Best: 0.018 ms, No improvement: 550/3000)
+[Monitor] ✓ New best! Config 586/1544: 0.018 ms (Progress: 587/1544)
+[Monitor] Progress: 637/1544 (Valid: 637, Failed: 0, Best: 0.018 ms, No improvement: 50/3000)
+[Monitor] ✓ New best! Config 2028/1544: 0.018 ms (Progress: 661/1544)
+[Monitor] Progress: 711/1544 (Valid: 711, Failed: 0, Best: 0.018 ms, No improvement: 50/3000)
+[Monitor] ✓ New best! Config 871/1544: 0.018 ms (Progress: 737/1544)
+[Monitor] ✓ New best! Config 2026/1544: 0.017 ms (Progress: 740/1544)
+[Monitor] Progress: 790/1544 (Valid: 790, Failed: 0, Best: 0.017 ms, No improvement: 50/3000)
+[Monitor] Progress: 840/1544 (Valid: 840, Failed: 0, Best: 0.017 ms, No improvement: 100/3000)
+[Monitor] Progress: 890/1544 (Valid: 890, Failed: 0, Best: 0.017 ms, No improvement: 150/3000)
+[Monitor] Progress: 940/1544 (Valid: 940, Failed: 0, Best: 0.017 ms, No improvement: 200/3000)
+[Monitor] Progress: 990/1544 (Valid: 990, Failed: 0, Best: 0.017 ms, No improvement: 250/3000)
+[Monitor] Progress: 1040/1544 (Valid: 1040, Failed: 0, Best: 0.017 ms, No improvement: 300/3000)
+[Monitor] Progress: 1090/1544 (Valid: 1090, Failed: 0, Best: 0.017 ms, No improvement: 350/3000)
+[Monitor] Progress: 1140/1544 (Valid: 1140, Failed: 0, Best: 0.017 ms, No improvement: 400/3000)
+[Monitor] Progress: 1190/1544 (Valid: 1190, Failed: 0, Best: 0.017 ms, No improvement: 450/3000)
+[Monitor] Progress: 1240/1544 (Valid: 1240, Failed: 0, Best: 0.017 ms, No improvement: 500/3000)
+[Monitor] Progress: 1290/1544 (Valid: 1290, Failed: 0, Best: 0.017 ms, No improvement: 550/3000)
+[Monitor] Progress: 1340/1544 (Valid: 1340, Failed: 0, Best: 0.017 ms, No improvement: 600/3000)
+[Monitor] Progress: 1390/1544 (Valid: 1390, Failed: 0, Best: 0.017 ms, No improvement: 650/3000)
+[Monitor] Progress: 1440/1544 (Valid: 1440, Failed: 0, Best: 0.017 ms, No improvement: 700/3000)
+[Monitor] Progress: 1490/1544 (Valid: 1490, Failed: 0, Best: 0.017 ms, No improvement: 750/3000)
+[Monitor] Progress: 1540/1544 (Valid: 1540, Failed: 0, Best: 0.017 ms, No improvement: 800/3000)
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=8192, n=4, C=128, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 1544/1544
+[Monitor] Valid results: 1544
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.017 ms
+[Monitor] Best config index: 2026
+[Monitor] Best config: {'BLOCK_M': 64, 'BLOCK_N': 16, 'BLOCK_K': 64, 'BLOCK_C': 128, 'NUM_KSPLIT': 1, 'num_warps': 4, 'num_stages': 2, 'waves_per_eu': 0}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C128_20260505_101720.json
+[Monitor] ================================================================================
+
+[Main] Completed tuning for fused_mhc: M=8192, n=4, C=128, sinkhorn_iters=20
+
+
+================================================================================
+Starting tuning for fused_mhc: M=16384, n=4, C=128, sinkhorn_iters=20
+================================================================================
+[Main] Found 5271 previously tested configs, will skip them
+[Main] Testing 489/5760 configs (skipping 5271 already tested)
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+[aiter] import [module_aiter_core] under /home/anguyenh/aiter/aiter/jit/module_aiter_core.so
+
+[Monitor] Started monitoring results for fused_mhc: M=16384, n=4, C=128, sinkhorn_iters=20
+[Monitor] Waiting for 489 benchmark results...
+[Monitor] Will stop early if no improvement after 3000 configs
+[Monitor] ✓ New best! Config 752/489: 0.043 ms (Progress: 1/489)
+[Monitor] ✓ New best! Config 4706/489: 0.035 ms (Progress: 2/489)
+[Monitor] ✓ New best! Config 694/489: 0.027 ms (Progress: 9/489)
+[Monitor] ✓ New best! Config 1035/489: 0.026 ms (Progress: 17/489)
+[Monitor] ✓ New best! Config 3401/489: 0.026 ms (Progress: 27/489)
+[Monitor] Progress: 77/489 (Valid: 77, Failed: 0, Best: 0.026 ms, No improvement: 50/3000)
+[Monitor] Progress: 127/489 (Valid: 127, Failed: 0, Best: 0.026 ms, No improvement: 100/3000)
+[Monitor] ✓ New best! Config 2910/489: 0.024 ms (Progress: 163/489)
+[Monitor] Progress: 213/489 (Valid: 213, Failed: 0, Best: 0.024 ms, No improvement: 50/3000)
+[Monitor] Progress: 263/489 (Valid: 263, Failed: 0, Best: 0.024 ms, No improvement: 100/3000)
+[Monitor] Progress: 313/489 (Valid: 313, Failed: 0, Best: 0.024 ms, No improvement: 150/3000)
+[Monitor] ✓ New best! Config 2815/489: 0.022 ms (Progress: 354/489)
+[Monitor] Progress: 404/489 (Valid: 404, Failed: 0, Best: 0.022 ms, No improvement: 50/3000)
+[Monitor] Progress: 454/489 (Valid: 454, Failed: 0, Best: 0.022 ms, No improvement: 100/3000)
+
+[Monitor] ================================================================================
+[Monitor] RESULTS SUMMARY for fused_mhc: M=16384, n=4, C=128, sinkhorn_iters=20
+[Monitor] ================================================================================
+[Monitor] Total configs tested: 489/489
+[Monitor] Valid results: 489
+[Monitor] Failed configs: 0
+[Monitor] Best time: 0.022 ms
+[Monitor] Best config index: 2815
+[Monitor] Best config: {'BLOCK_M': 64, 'BLOCK_N': 16, 'BLOCK_K': 256, 'BLOCK_C': 256, 'NUM_KSPLIT': 1, 'num_warps': 4, 'num_stages': 1, 'waves_per_eu': 0}
+[Monitor] Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C128_20260505_101720.json
+[Monitor] ================================================================================
+
+[Main] Completed tuning for fused_mhc: M=16384, n=4, C=128, sinkhorn_iters=20
+
+
+--------------------------------------------------------------------------------
+COMPLETED C=128
+  Time: 0:12:36.324872
+  M values tuned: 5
+  Results saved to: best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C128_20260505_101720.json
+--------------------------------------------------------------------------------
+
+================================================================================
+TUNING COMPLETE
+  Kernel: fused_mhc
+  Sinkhorn iterations: 20
+  C values tuned: [128]
+  Total time: 0:12:36.327018
+  M values per C: 5
+  Configs per M value: 5760
+  Total benchmarks: 28800
+  Output files:
+    - best_configs_mhc_fused_mhc_sk20_M1024_2048_4096_8192_16384_n4_C128_20260505_101720.json
+================================================================================

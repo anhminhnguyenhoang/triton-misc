@@ -1,0 +1,38 @@
+{
+  "M1024_n4_C512_sk20": {
+    "config": {
+      "BLOCK_M": 32,
+      "BLOCK_N": 16,
+      "BLOCK_K": 128,
+      "BLOCK_C": 128,
+      "NUM_KSPLIT": 1,
+      "num_warps": 4,
+      "num_stages": 2,
+      "waves_per_eu": 0
+    },
+    "time_ms": 0.020588278162267222,
+    "kernel": "fused_mhc",
+    "M": 1024,
+    "n": 4,
+    "C": 512,
+    "sinkhorn_iters": 20
+  },
+  "M2048_n4_C512_sk20": {
+    "config": {
+      "BLOCK_M": 32,
+      "BLOCK_N": 16,
+      "BLOCK_K": 128,
+      "BLOCK_C": 128,
+      "NUM_KSPLIT": 1,
+      "num_warps": 4,
+      "num_stages": 2,
+      "waves_per_eu": 0
+    },
+    "time_ms": 0.021260289745816195,
+    "kernel": "fused_mhc",
+    "M": 2048,
+    "n": 4,
+    "C": 512,
+    "sinkhorn_iters": 20
+  }
+}
